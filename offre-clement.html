@@ -7,7 +7,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  
   :root {
     --primary: #d14718;
     --primary-soft: #fdf2ee;
@@ -20,7 +19,6 @@
     --bg: #ffffff;
     --bg-light: #fafafa;
   }
-
   body {
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
     background: var(--bg-light);
@@ -28,309 +26,61 @@
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
   }
-
-  /* Header */
-  .header {
-    background: var(--bg);
-    border-bottom: 3px solid var(--primary);
-    padding: 20px 0;
-    position: sticky;
-    top: 0;
-    z-index: 10;
-  }
-  .header-inner {
-    max-width: 720px;
-    margin: 0 auto;
-    padding: 0 24px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  .logo {
-    font-size: 22px;
-    font-weight: 800;
-    letter-spacing: -0.5px;
-  }
+  .header { background: var(--bg); border-bottom: 3px solid var(--primary); padding: 20px 0; position: sticky; top: 0; z-index: 10; }
+  .header-inner { max-width: 720px; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; justify-content: space-between; }
+  .logo { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; }
   .logo span:first-child { color: var(--primary); }
   .logo span:last-child { color: var(--text-black); }
-  .logo-sub {
-    font-size: 11px;
-    color: var(--text-light);
-    font-weight: 500;
-    margin-top: 2px;
-  }
-  .header-link {
-    font-size: 13px;
-    color: var(--text-light);
-    text-decoration: none;
-    transition: color 0.2s;
-  }
+  .logo-sub { font-size: 11px; color: var(--text-light); font-weight: 500; margin-top: 2px; }
+  .header-right { display: flex; align-items: center; gap: 12px; }
+  .header-link { font-size: 13px; color: var(--text-light); text-decoration: none; transition: color 0.2s; }
   .header-link:hover { color: var(--primary); }
+  .nav-dropdown { position: relative; }
+  .nav-toggle { font-size: 13px; font-weight: 600; color: var(--text-mid); background: var(--bg-light); border: 1px solid var(--border); border-radius: 8px; padding: 8px 14px; cursor: pointer; transition: border-color 0.2s; }
+  .nav-toggle:hover { border-color: var(--primary); }
+  .nav-menu { display: none; position: absolute; top: calc(100% + 6px); right: 0; background: var(--bg); border: 1.5px solid var(--border); border-radius: 10px; box-shadow: 0 8px 30px rgba(0,0,0,0.1); min-width: 260px; z-index: 100; overflow: hidden; }
+  .nav-menu.open { display: block; }
+  .nav-menu a { display: block; padding: 12px 16px; font-size: 13px; font-weight: 500; color: var(--text-dark); text-decoration: none; border-bottom: 1px solid var(--border); transition: background 0.15s; }
+  .nav-menu a:last-child { border-bottom: none; }
+  .nav-menu a:hover { background: var(--primary-soft); }
+  .nav-menu a .nav-label { font-size: 10px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; color: var(--primary); display: block; margin-bottom: 2px; }
 
-  /* Hero */
-  .hero {
-    background: var(--bg);
-    padding: 48px 24px 40px;
-    text-align: center;
-    border-bottom: 1px solid var(--border);
-  }
-  .badge {
-    display: inline-block;
-    background: var(--primary);
-    color: white;
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 1.2px;
-    text-transform: uppercase;
-    padding: 6px 14px;
-    border-radius: 6px;
-    margin-bottom: 20px;
-  }
-  .hero h1 {
-    font-size: 32px;
-    font-weight: 800;
-    color: var(--text-black);
-    line-height: 1.2;
-    margin-bottom: 12px;
-    letter-spacing: -0.5px;
-  }
-  .hero-meta {
-    display: flex;
-    gap: 20px;
-    justify-content: center;
-    flex-wrap: wrap;
-    margin-top: 16px;
-  }
-  .hero-meta-item {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 14px;
-    color: var(--text-mid);
-    font-weight: 500;
-  }
-  .hero-meta-item .dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: var(--primary);
-    opacity: 0.6;
-  }
-
-  /* Content */
-  .content {
-    max-width: 720px;
-    margin: 0 auto;
-    padding: 40px 24px 80px;
-  }
-
-  /* Intro card */
-  .intro-card {
-    background: var(--primary-soft);
-    border-left: 4px solid var(--primary);
-    border-radius: 0 10px 10px 0;
-    padding: 20px 24px;
-    margin-bottom: 36px;
-    font-size: 15px;
-    color: var(--text-dark);
-  }
+  .hero { background: var(--bg); padding: 48px 24px 40px; text-align: center; border-bottom: 1px solid var(--border); }
+  .badge { display: inline-block; background: var(--primary); color: white; font-size: 11px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; padding: 6px 14px; border-radius: 6px; margin-bottom: 20px; }
+  .hero h1 { font-size: 32px; font-weight: 800; color: var(--text-black); line-height: 1.2; margin-bottom: 12px; letter-spacing: -0.5px; }
+  .hero-meta { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin-top: 16px; }
+  .hero-meta-item { display: flex; align-items: center; gap: 6px; font-size: 14px; color: var(--text-mid); font-weight: 500; }
+  .hero-meta-item .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--primary); opacity: 0.6; }
+  .content { max-width: 720px; margin: 0 auto; padding: 40px 24px 80px; }
+  .intro-card { background: var(--primary-soft); border-left: 4px solid var(--primary); border-radius: 0 10px 10px 0; padding: 20px 24px; margin-bottom: 36px; font-size: 15px; color: var(--text-dark); }
   .intro-card strong { color: var(--text-black); }
-
-  /* Sections */
   .section { margin-bottom: 36px; }
-  .section-label {
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    color: var(--primary);
-    margin-bottom: 10px;
-  }
-  .section h2 {
-    font-size: 22px;
-    font-weight: 700;
-    color: var(--text-black);
-    margin-bottom: 14px;
-    letter-spacing: -0.3px;
-  }
-  .section p {
-    font-size: 15px;
-    line-height: 1.7;
-    color: var(--text-dark);
-    margin-bottom: 12px;
-  }
-  .section p a {
-    color: var(--primary);
-    font-weight: 600;
-    text-decoration: none;
-    border-bottom: 1.5px solid rgba(209, 71, 24, 0.3);
-    transition: border-color 0.2s;
-  }
+  .section-label { font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--primary); margin-bottom: 10px; }
+  .section h2 { font-size: 22px; font-weight: 700; color: var(--text-black); margin-bottom: 14px; letter-spacing: -0.3px; }
+  .section p { font-size: 15px; line-height: 1.7; color: var(--text-dark); margin-bottom: 12px; }
+  .section p a { color: var(--primary); font-weight: 600; text-decoration: none; border-bottom: 1.5px solid rgba(209, 71, 24, 0.3); transition: border-color 0.2s; }
   .section p a:hover { border-color: var(--primary); }
-
-  /* Phase blocks */
-  .phase {
-    background: var(--bg);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 20px 24px;
-    margin-bottom: 12px;
-  }
-  .phase-title {
-    font-size: 14px;
-    font-weight: 700;
-    color: var(--text-black);
-    margin-bottom: 12px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .phase-number {
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
-    background: var(--primary);
-    color: white;
-    font-size: 12px;
-    font-weight: 700;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-  }
-  .phase ul {
-    list-style: none;
-    padding: 0;
-  }
-  .phase li {
-    position: relative;
-    padding-left: 20px;
-    font-size: 14px;
-    line-height: 1.6;
-    color: var(--text-dark);
-    margin-bottom: 8px;
-  }
-  .phase li::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 8px;
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: var(--primary-medium);
-    border: 2px solid var(--primary);
-  }
-
-  /* Skills */
-  .skills-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-  }
-  @media (max-width: 600px) {
-    .skills-grid { grid-template-columns: 1fr; }
-  }
-  .skill-item {
-    display: flex;
-    align-items: flex-start;
-    gap: 10px;
-    padding: 12px 14px;
-    background: var(--bg);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    font-size: 13px;
-    line-height: 1.5;
-    color: var(--text-dark);
-    transition: border-color 0.2s, box-shadow 0.2s;
-  }
-  .skill-item:hover {
-    border-color: var(--primary);
-    box-shadow: 0 2px 12px rgba(209, 71, 24, 0.08);
-  }
-  .skill-check {
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    background: var(--primary);
-    color: white;
-    font-size: 11px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    margin-top: 1px;
-  }
-
-  /* Offer box */
-  .offer-box {
-    background: var(--bg);
-    border: 1.5px solid var(--border);
-    border-radius: 12px;
-    overflow: hidden;
-  }
-  .offer-row {
-    display: flex;
-    padding: 14px 20px;
-    border-bottom: 1px solid var(--border);
-    align-items: center;
-  }
+  .phase { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 20px 24px; margin-bottom: 12px; }
+  .phase-title { font-size: 14px; font-weight: 700; color: var(--text-black); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+  .phase-number { width: 24px; height: 24px; border-radius: 50%; background: var(--primary); color: white; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .phase ul { list-style: none; padding: 0; }
+  .phase li { position: relative; padding-left: 20px; font-size: 14px; line-height: 1.6; color: var(--text-dark); margin-bottom: 8px; }
+  .phase li::before { content: ''; position: absolute; left: 0; top: 8px; width: 8px; height: 8px; border-radius: 50%; background: var(--primary-medium); border: 2px solid var(--primary); }
+  .skills-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  @media (max-width: 600px) { .skills-grid { grid-template-columns: 1fr; } }
+  .skill-item { display: flex; align-items: flex-start; gap: 10px; padding: 12px 14px; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; font-size: 13px; line-height: 1.5; color: var(--text-dark); transition: border-color 0.2s, box-shadow 0.2s; }
+  .skill-item:hover { border-color: var(--primary); box-shadow: 0 2px 12px rgba(209, 71, 24, 0.08); }
+  .skill-check { width: 20px; height: 20px; border-radius: 50%; background: var(--primary); color: white; font-size: 11px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+  .offer-box { background: var(--bg); border: 1.5px solid var(--border); border-radius: 12px; overflow: hidden; }
+  .offer-row { display: flex; padding: 14px 20px; border-bottom: 1px solid var(--border); align-items: center; }
   .offer-row:last-child { border-bottom: none; }
-  .offer-label {
-    width: 140px;
-    flex-shrink: 0;
-    font-size: 13px;
-    font-weight: 700;
-    color: var(--text-black);
-  }
-  .offer-value {
-    font-size: 13px;
-    color: var(--text-dark);
-    flex: 1;
-  }
-
-  /* CTA */
-  .cta-section {
-    text-align: center;
-    margin-top: 40px;
-    padding: 36px 24px;
-    background: var(--primary-soft);
-    border-radius: 14px;
-    border: 1.5px solid rgba(209, 71, 24, 0.15);
-  }
-  .cta-section p {
-    font-size: 16px;
-    color: var(--text-dark);
-    margin-bottom: 20px;
-    line-height: 1.6;
-    font-weight: 500;
-  }
-  .cta-btn {
-    display: inline-block;
-    background: var(--primary);
-    color: white;
-    font-size: 15px;
-    font-weight: 700;
-    padding: 14px 32px;
-    border-radius: 8px;
-    text-decoration: none;
-    transition: background 0.2s, transform 0.15s;
-    box-shadow: 0 4px 16px rgba(209, 71, 24, 0.25);
-  }
-  .cta-btn:hover {
-    background: #b83d14;
-    transform: translateY(-1px);
-  }
-
-  /* Footer */
-  .footer {
-    text-align: center;
-    padding: 32px 24px;
-    font-size: 12px;
-    color: var(--text-light);
-    border-top: 1px solid var(--border);
-    margin-top: 40px;
-  }
+  .offer-label { width: 140px; flex-shrink: 0; font-size: 13px; font-weight: 700; color: var(--text-black); }
+  .offer-value { font-size: 13px; color: var(--text-dark); flex: 1; }
+  .cta-section { text-align: center; margin-top: 40px; padding: 36px 24px; background: var(--primary-soft); border-radius: 14px; border: 1.5px solid rgba(209, 71, 24, 0.15); }
+  .cta-section p { font-size: 16px; color: var(--text-dark); margin-bottom: 20px; line-height: 1.6; font-weight: 500; }
+  .cta-btn { display: inline-block; background: var(--primary); color: white; font-size: 15px; font-weight: 700; padding: 14px 32px; border-radius: 8px; text-decoration: none; transition: background 0.2s, transform 0.15s; box-shadow: 0 4px 16px rgba(209, 71, 24, 0.25); }
+  .cta-btn:hover { background: #b83d14; transform: translateY(-1px); }
+  .footer { text-align: center; padding: 32px 24px; font-size: 12px; color: var(--text-light); border-top: 1px solid var(--border); margin-top: 40px; }
   .footer a { color: var(--primary); text-decoration: none; }
 </style>
 </head>
@@ -342,7 +92,17 @@
       <div class="logo"><span>PME</span><span>BTP</span></div>
       <div class="logo-sub">Service Emploi spécialisé depuis 27 ans</div>
     </div>
-    <a href="https://www.pmebtp.com" target="_blank" class="header-link">pmebtp.com ↗</a>
+    <div class="header-right">
+      <a href="https://www.pmebtp.com" target="_blank" class="header-link">pmebtp.com ↗</a>
+      <div class="nav-dropdown">
+        <button class="nav-toggle" onclick="document.querySelector('.nav-menu').classList.toggle('open')">Navigation ▾</button>
+        <div class="nav-menu">
+          <a href="/"><span class="nav-label">Accueil</span>Tous les documents</a>
+          <a href="/offre-clement.html"><span class="nav-label">Offre d'emploi</span>Commercial — Clément</a>
+          <a href="/playbook-csm.html"><span class="nav-label">Playbook</span>Customer Success — 100 jours</a>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -363,30 +123,17 @@
     On a eu ton contact par Virgil et ton profil a retenu notre attention.
   </div>
 
-  <!-- Contexte -->
   <div class="section">
     <div class="section-label">Contexte</div>
     <h2>Rejoins l'aventure dès le jour 1</h2>
-    <p>
-      Nous sommes en cours de rachat de <a href="https://www.pmebtp.com" target="_blank">PME BTP</a>, 
-      un jobboard RH spécialisé dans le BTP et leader français sur son marché. 
-      L'entreprise est rentable, avec une base clients établie et du chiffre récurrent. 
-      L'équipe commerciale était composée de trois personnes — l'une d'entre elles est en cours de départ, 
-      et nous cherchons à la remplacer.
-    </p>
-    <p>
-      Mais on ne cherche pas juste un remplacement. On cherche quelqu'un qui incarne la nouvelle dynamique 
-      de l'entreprise : plus moderne, plus structuré, plus ambitieux. Quelqu'un qui arrive dès le premier jour 
-      avec le repreneur et qui fait partie de la nouvelle équipe dès le départ.
-    </p>
+    <p>Nous sommes en cours de rachat de <a href="https://www.pmebtp.com" target="_blank">PME BTP</a>, un jobboard RH spécialisé dans le BTP et leader français sur son marché. L'entreprise est rentable, avec une base clients établie et du chiffre récurrent. L'équipe commerciale était composée de trois personnes — l'une d'entre elles est en cours de départ, et nous cherchons à la remplacer.</p>
+    <p>Mais on ne cherche pas juste un remplacement. On cherche quelqu'un qui incarne la nouvelle dynamique de l'entreprise : plus moderne, plus structuré, plus ambitieux. Quelqu'un qui arrive dès le premier jour avec le repreneur et qui fait partie de la nouvelle équipe dès le départ.</p>
   </div>
 
-  <!-- Mission -->
   <div class="section">
     <div class="section-label">La mission</div>
     <h2>Apprendre, structurer, prendre les commandes</h2>
     <p>Tu rejoindras l'équipe commerciale existante (2 personnes) et travailleras en collaboration directe avec le CEO.</p>
-
     <div class="phase">
       <div class="phase-title"><div class="phase-number">1</div>Dans un premier temps</div>
       <ul>
@@ -396,7 +143,6 @@
         <li>Travailler en binôme avec les commerciaux en place pour assurer le transfert de connaissance</li>
       </ul>
     </div>
-
     <div class="phase">
       <div class="phase-title"><div class="phase-number">2</div>Rapidement ensuite</div>
       <ul>
@@ -408,7 +154,6 @@
     </div>
   </div>
 
-  <!-- Profil -->
   <div class="section">
     <div class="section-label">Profil recherché</div>
     <h2>Le profil qu'on cherche</h2>
@@ -422,7 +167,6 @@
     </div>
   </div>
 
-  <!-- Offre -->
   <div class="section">
     <div class="section-label">Ce qu'on propose</div>
     <h2>Les modalités</h2>
@@ -435,11 +179,25 @@
     </div>
   </div>
 
-  <!-- CTA -->
   <div class="cta-section">
     <p>Ce n'est pas juste un poste de commercial.<br>C'est l'opportunité d'arriver au moment du rachat, de faire partie du noyau dur de la nouvelle équipe, et de grandir avec l'entreprise.</p>
-    <a href="/cdn-cgi/l/email-protection#1a6e727f7b6f5a6a777f786e6a3479757725696f78707f796e27597b747e737e7b6e6f687f3f282a597577777f6879737b763f282a4a575f3f282a584e4a" class="cta-btn">Répondre à cette offre →</a>
+    <a href="mailto:theau@pmebtp.com?subject=Candidature%20Commercial%20PME%20BTP" class="cta-btn">Répondre à cette offre →</a>
   </div>
 
   <div class="footer">
-    <a href="https://www.pmebtp.com" target="_blank">PME BTP</a> ·
+    <a href="https://www.pmebtp.com" target="_blank">PME BTP</a> · Jobboard RH spécialisé BTP · Leader français
+  </div>
+
+</div>
+
+<script>
+document.addEventListener('click', (e) => {
+  const menu = document.querySelector('.nav-menu');
+  const toggle = document.querySelector('.nav-toggle');
+  if (menu && !menu.contains(e.target) && !toggle.contains(e.target)) {
+    menu.classList.remove('open');
+  }
+});
+</script>
+</body>
+</html>

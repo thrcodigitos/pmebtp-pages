@@ -66,15 +66,63 @@
     font-weight: 500;
     margin-top: 2px;
   }
-  .header-tag {
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .nav-dropdown {
+    position: relative;
+  }
+  .nav-toggle {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-mid);
+    background: var(--bg-light);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 14px;
+    cursor: pointer;
+    transition: border-color 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .nav-toggle:hover { border-color: var(--primary); }
+  .nav-menu {
+    display: none;
+    position: absolute;
+    top: calc(100% + 6px);
+    right: 0;
+    background: var(--bg);
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+    min-width: 260px;
+    z-index: 100;
+    overflow: hidden;
+  }
+  .nav-menu.open { display: block; }
+  .nav-menu a {
+    display: block;
+    padding: 12px 16px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-dark);
+    text-decoration: none;
+    border-bottom: 1px solid var(--border);
+    transition: background 0.15s;
+  }
+  .nav-menu a:last-child { border-bottom: none; }
+  .nav-menu a:hover { background: var(--primary-soft); }
+  .nav-menu a .nav-label {
     font-size: 10px;
     font-weight: 700;
-    letter-spacing: 1.2px;
+    letter-spacing: 0.8px;
     text-transform: uppercase;
     color: var(--primary);
-    background: var(--primary-soft);
-    padding: 5px 12px;
-    border-radius: 6px;
+    display: block;
+    margin-bottom: 2px;
   }
 
   /* Hero */
@@ -488,7 +536,18 @@
       <div class="logo"><span>PME</span><span>BTP</span></div>
       <div class="logo-sub">Service Emploi spécialisé depuis 27 ans</div>
     </div>
-    <div class="header-tag">Documentation interne</div>
+    <div class="header-right">
+      <div class="nav-dropdown">
+        <button class="nav-toggle" onclick="document.querySelector('.nav-menu').classList.toggle('open')">
+          Navigation ▾
+        </button>
+        <div class="nav-menu">
+          <a href="/"><span class="nav-label">Accueil</span>Tous les documents</a>
+          <a href="/offre-clement.html"><span class="nav-label">Offre d'emploi</span>Commercial — Clément</a>
+          <a href="/playbook-csm.html"><span class="nav-label">Playbook</span>Customer Success — 100 jours</a>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -929,6 +988,15 @@ function togglePhase(block) {
 document.addEventListener('DOMContentLoaded', () => {
   const first = document.querySelector('.phase-block');
   if (first) togglePhase(first);
+});
+
+// Close nav dropdown on click outside
+document.addEventListener('click', (e) => {
+  const menu = document.querySelector('.nav-menu');
+  const toggle = document.querySelector('.nav-toggle');
+  if (menu && !menu.contains(e.target) && !toggle.contains(e.target)) {
+    menu.classList.remove('open');
+  }
 });
 </script>
 
