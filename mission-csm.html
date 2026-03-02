@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PME BTP — Mission CSM Freelance</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="/header.js" defer></script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --primary: #d14718;
+    --primary-soft: #fdf2ee;
+    --primary-medium: rgba(209, 71, 24, 0.12);
+    --text-black: #111;
+    --text-dark: #333;
+    --text-mid: #666;
+    --text-light: #999;
+    --border: #e5e5e5;
+    --bg: #ffffff;
+    --bg-light: #fafafa;
+  }
+  body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background: var(--bg-light);
+    color: var(--text-dark);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .hero { background: var(--bg); padding: 48px 24px 40px; text-align: center; border-bottom: 1px solid var(--border); }
+  .hero-inner { max-width: 720px; margin: 0 auto; }
+  .badge { display: inline-block; background: var(--primary); color: white; font-size: 11px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; padding: 6px 14px; border-radius: 6px; margin-bottom: 20px; }
+  .hero h1 { font-size: 32px; font-weight: 800; color: var(--text-black); line-height: 1.2; margin-bottom: 12px; letter-spacing: -0.5px; }
+  .hero-meta { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin-top: 16px; }
+  .hero-meta-item { display: flex; align-items: center; gap: 6px; font-size: 14px; color: var(--text-mid); font-weight: 500; }
+  .hero-meta-item .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--primary); opacity: 0.6; }
+
+  .content { max-width: 720px; margin: 0 auto; padding: 40px 24px 80px; }
+
+  .intro-card { background: var(--primary-soft); border-left: 4px solid var(--primary); border-radius: 0 10px 10px 0; padding: 20px 24px; margin-bottom: 36px; font-size: 15px; color: var(--text-dark); line-height: 1.7; }
+  .intro-card strong { color: var(--text-black); }
+
+  .section { margin-bottom: 36px; }
+  .section-label { font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--primary); margin-bottom: 10px; }
+  .section h2 { font-size: 22px; font-weight: 700; color: var(--text-black); margin-bottom: 14px; letter-spacing: -0.3px; }
+  .section p { font-size: 15px; line-height: 1.7; color: var(--text-dark); margin-bottom: 12px; }
+  .section p a { color: var(--primary); font-weight: 600; text-decoration: none; border-bottom: 1.5px solid rgba(209, 71, 24, 0.3); transition: border-color 0.2s; }
+  .section p a:hover { border-color: var(--primary); }
+
+  .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 20px 0; }
+  @media (max-width: 600px) { .stats-row { grid-template-columns: repeat(2, 1fr); } }
+  .stat-card { text-align: center; padding: 16px 12px; background: var(--bg); border: 1px solid var(--border); border-radius: 10px; }
+  .stat-number { font-size: 24px; font-weight: 800; color: var(--primary); letter-spacing: -0.5px; }
+  .stat-label { font-size: 11px; color: var(--text-mid); font-weight: 600; margin-top: 2px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+  .phase { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 20px 24px; margin-bottom: 12px; }
+  .phase-title { font-size: 14px; font-weight: 700; color: var(--text-black); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+  .phase-number { width: 24px; height: 24px; border-radius: 50%; background: var(--primary); color: white; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .phase ul { list-style: none; padding: 0; }
+  .phase li { position: relative; padding-left: 20px; font-size: 14px; line-height: 1.6; color: var(--text-dark); margin-bottom: 8px; }
+  .phase li::before { content: ''; position: absolute; left: 0; top: 8px; width: 8px; height: 8px; border-radius: 50%; background: var(--primary-medium); border: 2px solid var(--primary); }
+
+  .skills-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  @media (max-width: 600px) { .skills-grid { grid-template-columns: 1fr; } }
+  .skill-item { display: flex; align-items: flex-start; gap: 10px; padding: 12px 14px; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; font-size: 13px; line-height: 1.5; color: var(--text-dark); transition: border-color 0.2s, box-shadow 0.2s; }
+  .skill-item:hover { border-color: var(--primary); box-shadow: 0 2px 12px rgba(209, 71, 24, 0.08); }
+  .skill-check { width: 20px; height: 20px; border-radius: 50%; background: var(--primary); color: white; font-size: 11px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+
+  .not-box { background: var(--bg); border: 1.5px solid var(--border); border-radius: 12px; padding: 20px 24px; margin-bottom: 16px; }
+  .not-box .not-title { font-size: 14px; font-weight: 700; color: var(--text-black); margin-bottom: 10px; }
+  .not-box .not-item { font-size: 14px; color: var(--text-mid); margin-bottom: 6px; padding-left: 20px; position: relative; }
+  .not-box .not-item::before { content: '✕'; position: absolute; left: 0; color: #cc3333; font-weight: 700; font-size: 12px; }
+  .yes-box .not-item::before { content: '✓'; color: var(--primary); }
+
+  .offer-box { background: var(--bg); border: 1.5px solid var(--border); border-radius: 12px; overflow: hidden; }
+  .offer-row { display: flex; padding: 14px 20px; border-bottom: 1px solid var(--border); align-items: center; }
+  .offer-row:last-child { border-bottom: none; }
+  .offer-label { width: 160px; flex-shrink: 0; font-size: 13px; font-weight: 700; color: var(--text-black); }
+  .offer-value { font-size: 13px; color: var(--text-dark); flex: 1; }
+
+  .books-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 12px; }
+  @media (max-width: 600px) { .books-grid { grid-template-columns: 1fr 1fr; } }
+  .book-item { padding: 12px 14px; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; text-align: center; font-size: 12px; font-weight: 600; color: var(--text-dark); line-height: 1.4; transition: border-color 0.2s; text-decoration: none; }
+  .book-item:hover { border-color: var(--primary); }
+  .book-item .book-emoji { font-size: 22px; display: block; margin-bottom: 6px; }
+  .book-item .book-author { font-size: 11px; font-weight: 400; color: var(--text-light); margin-top: 2px; }
+
+  .cta-section { text-align: center; margin-top: 40px; padding: 36px 24px; background: var(--primary-soft); border-radius: 14px; border: 1.5px solid rgba(209, 71, 24, 0.15); }
+  .cta-section p { font-size: 16px; color: var(--text-dark); margin-bottom: 20px; line-height: 1.6; font-weight: 500; }
+  .cta-btn { display: inline-block; background: var(--primary); color: white; font-size: 15px; font-weight: 700; padding: 14px 32px; border-radius: 8px; text-decoration: none; transition: background 0.2s, transform 0.15s; box-shadow: 0 4px 16px rgba(209, 71, 24, 0.25); }
+  .cta-btn:hover { background: #b83d14; transform: translateY(-1px); }
+
+  .footer { text-align: center; padding: 32px 24px; font-size: 12px; color: var(--text-light); border-top: 1px solid var(--border); margin-top: 40px; }
+  .footer a { color: var(--primary); text-decoration: none; }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="badge">Mission freelance</div>
+    <h1>Customer Success Manager</h1>
+    <div class="hero-meta">
+      <div class="hero-meta-item"><div class="dot"></div>Freelance · 4 à 6 mois</div>
+      <div class="hero-meta-item"><div class="dot"></div>Paris → Remote</div>
+      <div class="hero-meta-item"><div class="dot"></div>Dès que possible</div>
+    </div>
+  </div>
+</div>
+
+<div class="content">
+
+  <div class="intro-card">
+    <strong>Le résumé en une phrase :</strong> Vous arrivez dans une PME SaaS rentable en cours de rachat, vous auditez tout le pôle client, vous mettez en place le Customer Success de A à Z, et vous nous aidez à passer de 700 à 1 000 clients en réduisant le churn de 33% à 10%.
+  </div>
+
+  <!-- Contexte -->
+  <div class="section">
+    <div class="section-label">Contexte</div>
+    <h2>L'entreprise et le défi</h2>
+    <p><a href="https://www.pmebtp.com" target="_blank">PME BTP</a> est le leader français des jobboards spécialisés dans le BTP. 27 ans d'existence, 20 000 anciens clients, 700 clients actifs. Le produit : un abonnement annuel (à partir de 990€) pour les recruteurs de l'industrie du bâtiment et des travaux publics.</p>
+    <p>Nous sommes en cours de rachat de l'entreprise. Elle est rentable, mais en déclin depuis 3 ans : le CA est passé de 1,1M€ à ~850K€, la base clients de 1 000 à 700. La raison : 3 commerciaux, 0 Customer Success. On vend, on vend, on vend — mais personne ne s'occupe de délivrer, retenir et enchanter les clients.</p>
+    <p>Ça change maintenant. Nous construisons le pôle Customer Success de zéro, et nous cherchons la personne qui va le bâtir.</p>
+
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-number">700</div>
+        <div class="stat-label">Clients actifs</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">33%</div>
+        <div class="stat-label">Churn brut</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">1 300€</div>
+        <div class="stat-label">Panier moyen / an</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">~850K€</div>
+        <div class="stat-label">CA annuel</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mission -->
+  <div class="section">
+    <div class="section-label">La mission</div>
+    <h2>Auditer, construire, exécuter</h2>
+    <p>Vous travaillerez en collaboration directe avec le CEO, le CTO (remote) et l'équipe commerciale existante. Vous êtes le premier CSM de l'entreprise — vous créez tout de zéro.</p>
+
+    <div class="phase">
+      <div class="phase-title"><div class="phase-number">1</div>Audit & Discovery (mois 1)</div>
+      <ul>
+        <li>Appeler 30 à 50 clients actifs : comprendre pourquoi ils sont là, ce qui leur plaît, ce qui leur manque, ce qui les ferait partir</li>
+        <li>Appeler 20 à 30 anciens clients : comprendre pourquoi ils sont partis, ce qui les ferait revenir</li>
+        <li>Appeler 10 à 15 prospects : comprendre les freins à l'achat, les attentes non couvertes</li>
+        <li>Analyser les données de churn sur 3 ans : qui part, quand, pourquoi, quel profil</li>
+        <li>Segmenter la base clients et affiner l'ICP (profil client idéal)</li>
+        <li>Cartographier la concurrence et positionner PME BTP</li>
+      </ul>
+    </div>
+
+    <div class="phase">
+      <div class="phase-title"><div class="phase-number">2</div>Quick Wins & Fondations (mois 2)</div>
+      <ul>
+        <li>Créer le process d'onboarding client de A à Z : email de bienvenue, appel de setup, check-ins J+7 et J+30</li>
+        <li>Mettre en place les alertes anti-churn : signaux faibles, renouvellements à J-90/J-60/J-30</li>
+        <li>Déployer un Health Score client et un dashboard de suivi (en coordination avec le CTO)</li>
+        <li>Contacter personnellement les 50 clients les plus à risque de churn</li>
+        <li>Redéfinir l'ICP et aligner l'équipe commerciale sur les bons clients</li>
+      </ul>
+    </div>
+
+    <div class="phase">
+      <div class="phase-title"><div class="phase-number">3</div>Scale & Systématiser (mois 3-4)</div>
+      <ul>
+        <li>Automatiser le cycle de vie client complet : acquisition → onboarding → adoption → renouvellement → advocacy</li>
+        <li>Structurer le feedback loop produit : remonter les demandes clients vers l'équipe tech, prioriser par impact sur la rétention</li>
+        <li>Lancer un programme de win-back pour récupérer les anciens clients</li>
+        <li>Créer des cas clients et des assets pour aider les commerciaux à closer</li>
+        <li>Identifier et exploiter les opportunités d'upsell sur la base existante</li>
+      </ul>
+    </div>
+
+    <div class="phase">
+      <div class="phase-title"><div class="phase-number">4</div>Mesurer & Pérenniser (mois 4-6)</div>
+      <ul>
+        <li>Mesurer l'impact : évolution du churn, NPS, taux de renouvellement, activation</li>
+        <li>Documenter tous les process dans un CSM Handbook</li>
+        <li>Former l'équipe existante aux fondamentaux du Customer Success</li>
+        <li>Recommandations stratégiques pour la suite : recrutement, outils, objectifs S2</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Objectifs -->
+  <div class="section">
+    <div class="section-label">Objectifs</div>
+    <h2>Ce qu'on mesure</h2>
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-number">≤ 10%</div>
+        <div class="stat-label">Churn cible</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">1 000</div>
+        <div class="stat-label">Clients fin 2026</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">≥ 90%</div>
+        <div class="stat-label">Renouvellement</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">≥ 50</div>
+        <div class="stat-label">NPS cible</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Profil -->
+  <div class="section">
+    <div class="section-label">Profil recherché</div>
+    <h2>Ce qu'on cherche (vraiment)</h2>
+    <div class="skills-grid">
+      <div class="skill-item"><div class="skill-check">✓</div>Expérience confirmée en Customer Success dans un environnement SaaS ou abonnement</div>
+      <div class="skill-item"><div class="skill-check">✓</div>Vous avez déjà réduit un churn significativement — avec des chiffres, pas des PowerPoints</div>
+      <div class="skill-item"><div class="skill-check">✓</div>Vous savez parler aux clients : interviews, NPS, feedback qualitatif — c'est votre quotidien</div>
+      <div class="skill-item"><div class="skill-check">✓</div>Vous êtes à la fois stratège ET exécutant : vous pensez le plan et vous le mettez en place vous-même</div>
+      <div class="skill-item"><div class="skill-check">✓</div>Vous arrivez avec vos méthodes, vos outils, vos frameworks — et vous dites "laissez-moi m'en occuper"</div>
+      <div class="skill-item"><div class="skill-check">✓</div>Vous êtes familier avec les méthodologies de Nick Mehta, Joey Coleman, Dan Martell et compagnie</div>
+      <div class="skill-item"><div class="skill-check">✓</div>Vous maîtrisez les outils : CRM, dashboards, automations, Notion, Slack</div>
+      <div class="skill-item"><div class="skill-check">✓</div>Autonome, assertif(ve), proactif(ve) — vous n'attendez pas qu'on vous dise quoi faire</div>
+    </div>
+  </div>
+
+  <!-- Ce qu'on ne cherche pas -->
+  <div class="section">
+    <div class="not-box">
+      <div class="not-title">⚠️ Ce qu'on ne cherche PAS</div>
+      <div class="not-item">Un consultant qui fait un audit et repart avec un joli rapport</div>
+      <div class="not-item">Quelqu'un qui donne des idées générales sans les exécuter</div>
+      <div class="not-item">Un profil junior qui a besoin d'être guidé sur les méthodes CSM</div>
+      <div class="not-item">Quelqu'un qui attend les instructions avant d'avancer</div>
+    </div>
+    <div class="not-box yes-box">
+      <div class="not-title">✅ Ce qu'on cherche</div>
+      <div class="not-item">Quelqu'un qui a déjà fait, qui le prouve, et qui arrive en mode "j'exécute"</div>
+      <div class="not-item">Un builder qui crée le pôle CSM de zéro et le rend opérationnel</div>
+      <div class="not-item">Un profil senior qui prend les commandes du customer success dès le jour 1</div>
+    </div>
+  </div>
+
+  <!-- Biblio -->
+  <div class="section">
+    <div class="section-label">Notre ADN</div>
+    <h2>Les méthodologies qui nous inspirent</h2>
+    <p>On ne vous demande pas de les avoir lus de A à Z, mais si ces noms vous parlent, c'est bon signe.</p>
+    <div class="books-grid">
+      <a href="https://www.amazon.fr/dp/1119167965" target="_blank" class="book-item"><span class="book-emoji">📘</span>Customer Success<div class="book-author">Nick Mehta</div></a>
+      <a href="https://www.amazon.fr/dp/099080092X" target="_blank" class="book-item"><span class="book-emoji">🗣️</span>Talking to Humans<div class="book-author">Giff Constable</div></a>
+      <a href="https://www.amazon.fr/dp/0735220034" target="_blank" class="book-item"><span class="book-emoji">♾️</span>Never Lose a Customer Again<div class="book-author">Joey Coleman</div></a>
+      <a href="https://www.amazon.fr/dp/1945849479" target="_blank" class="book-item"><span class="book-emoji">📌</span>Retention Point<div class="book-author">Robert Skrob</div></a>
+      <a href="https://www.amazon.fr/dp/0593422953" target="_blank" class="book-item"><span class="book-emoji">⚡</span>Buy Back Your Time<div class="book-author">Dan Martell</div></a>
+      <a href="https://www.amazon.fr/dp/1960098039" target="_blank" class="book-item"><span class="book-emoji">🚀</span>SaaS Playbook<div class="book-author">Rob Walling</div></a>
+    </div>
+  </div>
+
+  <!-- Modalités -->
+  <div class="section">
+    <div class="section-label">Modalités</div>
+    <h2>Les conditions de la mission</h2>
+    <div class="offer-box">
+      <div class="offer-row"><div class="offer-label">Format</div><div class="offer-value">Mission freelance · 4 à 6 mois · Plein temps</div></div>
+      <div class="offer-row"><div class="offer-label">Rémunération</div><div class="offer-value">4 000 à 7 000 € / mois selon expérience</div></div>
+      <div class="offer-row"><div class="offer-label">Localisation</div><div class="offer-value">Paris (bureau) les premiers mois, puis transition vers du remote</div></div>
+      <div class="offer-row"><div class="offer-label">Démarrage</div><div class="offer-value">Dès que possible (mars 2026)</div></div>
+      <div class="offer-row"><div class="offer-label">Équipe</div><div class="offer-value">Collaboration directe avec le CEO, le CTO et l'équipe commerciale</div></div>
+      <div class="offer-row"><div class="offer-label">Objectif remote</div><div class="offer-value">100% remote d'ici fin 2026</div></div>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div class="cta-section">
+    <p>Vous avez l'expérience, les méthodes et l'énergie pour construire un pôle Customer Success de zéro dans une PME SaaS en pleine transformation ?</p>
+    <a href="mailto:theau@pmebtp.com?subject=Candidature%20CSM%20Freelance%20PME%20BTP" class="cta-btn">Postuler à cette mission →</a>
+  </div>
+
+  <div class="footer">
+    <a href="https://www.pmebtp.com" target="_blank">PME BTP</a> · Jobboard RH spécialisé BTP · Leader français
+  </div>
+
+</div>
+
+</body>
+</html>
