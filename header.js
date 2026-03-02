@@ -30,12 +30,16 @@
       align-items: center;
       justify-content: space-between;
     }
+    .pmebtp-logo-link {
+      text-decoration: none;
+      display: block;
+      transition: opacity 0.2s;
+    }
+    .pmebtp-logo-link:hover { opacity: 0.7; }
     .pmebtp-logo {
       font-size: 22px;
       font-weight: 800;
       letter-spacing: -0.5px;
-      text-decoration: none;
-      display: block;
     }
     .pmebtp-logo span:first-child { color: #d14718; }
     .pmebtp-logo span:last-child { color: #111; }
@@ -113,8 +117,11 @@
   `;
   document.head.appendChild(style);
 
-  // Build nav links
+  // Find current page name for toggle label
   const currentPath = window.location.pathname;
+  const currentPage = pages.find(p => currentPath === p.url || (p.url !== '/' && currentPath.endsWith(p.url)));
+  const toggleLabel = currentPage ? currentPage.title : 'Navigation';
+
   const navLinks = pages.map(p => {
     const isActive = currentPath === p.url || (p.url !== '/' && currentPath.endsWith(p.url));
     return `<a href="${p.url}" class="${isActive ? 'active' : ''}"><span class="nav-label">${p.tag}</span>${p.title}</a>`;
@@ -125,14 +132,14 @@
   header.className = 'pmebtp-header';
   header.innerHTML = `
     <div class="pmebtp-header-inner">
-      <div>
-        <a href="/" class="pmebtp-logo"><span>PME</span><span>BTP</span></a>
+      <a href="/" class="pmebtp-logo-link">
+        <div class="pmebtp-logo"><span>PME</span><span>BTP</span></div>
         <div class="pmebtp-logo-sub">Service Emploi spécialisé depuis 27 ans</div>
-      </div>
+      </a>
       <div class="pmebtp-header-right">
         <a href="https://www.pmebtp.com" target="_blank" class="pmebtp-header-link">pmebtp.com ↗</a>
         <div class="pmebtp-nav-dropdown">
-          <button class="pmebtp-nav-toggle">Navigation ▾</button>
+          <button class="pmebtp-nav-toggle">${toggleLabel} ▾</button>
           <div class="pmebtp-nav-menu">${navLinks}</div>
         </div>
       </div>
