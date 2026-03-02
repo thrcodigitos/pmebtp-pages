@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PME BTP — Documents</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background: #fafafa;
+    color: #333;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }
+  .container {
+    max-width: 480px;
+    width: 100%;
+  }
+  .logo {
+    font-size: 28px;
+    font-weight: 800;
+    text-align: center;
+    margin-bottom: 6px;
+  }
+  .logo span:first-child { color: #d14718; }
+  .logo span:last-child { color: #111; }
+  .logo-sub {
+    text-align: center;
+    font-size: 12px;
+    color: #999;
+    font-weight: 500;
+    margin-bottom: 32px;
+  }
+  .card {
+    display: block;
+    background: #fff;
+    border: 1.5px solid #e5e5e5;
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-bottom: 12px;
+    text-decoration: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .card:hover {
+    border-color: #d14718;
+    box-shadow: 0 4px 20px rgba(209, 71, 24, 0.1);
+  }
+  .card-tag {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: #d14718;
+    margin-bottom: 6px;
+  }
+  .card-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #111;
+    margin-bottom: 4px;
+  }
+  .card-desc {
+    font-size: 13px;
+    color: #666;
+    line-height: 1.5;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="logo"><span>PME</span><span>BTP</span></div>
+  <div class="logo-sub">Documents internes</div>
+
+  <a href="/offre-clement.html" class="card">
+    <div class="card-tag">Offre d'emploi</div>
+    <div class="card-title">Commercial / Futur Responsable Commercial</div>
+    <div class="card-desc">Offre personnalisée pour Clément — CDI, Paris puis remote</div>
+  </a>
+
+  <a href="/playbook-csm.html" class="card">
+    <div class="card-tag">Playbook interne</div>
+    <div class="card-title">Customer Success : les 100 premiers jours</div>
+    <div class="card-desc">Plan d'action pour réduire le churn de 33% à 10% et passer de 700 à 1 000 clients</div>
+  </a>
+</div>
+</body>
+</html>
