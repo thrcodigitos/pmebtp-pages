@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PME BTP — Playbook Customer Success</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  
+  :root {
+    --primary: #d14718;
+    --primary-soft: #fdf2ee;
+    --primary-medium: rgba(209, 71, 24, 0.12);
+    --primary-glow: rgba(209, 71, 24, 0.06);
+    --green: #1a7a4c;
+    --green-soft: #edf7f1;
+    --blue: #1a5276;
+    --blue-soft: #eaf2f8;
+    --purple: #6c3483;
+    --purple-soft: #f4ecf7;
+    --text-black: #111;
+    --text-dark: #333;
+    --text-mid: #666;
+    --text-light: #999;
+    --border: #e5e5e5;
+    --bg: #ffffff;
+    --bg-light: #fafafa;
+  }
+
+  body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background: var(--bg-light);
+    color: var(--text-dark);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Header */
+  .header {
+    background: var(--bg);
+    border-bottom: 3px solid var(--primary);
+    padding: 20px 0;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+  .header-inner {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .logo {
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+  }
+  .logo span:first-child { color: var(--primary); }
+  .logo span:last-child { color: var(--text-black); }
+  .logo-sub {
+    font-size: 11px;
+    color: var(--text-light);
+    font-weight: 500;
+    margin-top: 2px;
+  }
+  .header-tag {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: var(--primary);
+    background: var(--primary-soft);
+    padding: 5px 12px;
+    border-radius: 6px;
+  }
+
+  /* Hero */
+  .hero {
+    background: var(--bg);
+    padding: 48px 24px 40px;
+    border-bottom: 1px solid var(--border);
+  }
+  .hero-inner {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  .hero-badge {
+    display: inline-block;
+    background: var(--primary);
+    color: white;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    padding: 6px 14px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+  }
+  .hero h1 {
+    font-size: 36px;
+    font-weight: 800;
+    color: var(--text-black);
+    line-height: 1.15;
+    margin-bottom: 14px;
+    letter-spacing: -0.5px;
+  }
+  .hero-sub {
+    font-size: 16px;
+    color: var(--text-mid);
+    line-height: 1.6;
+    max-width: 620px;
+  }
+
+  /* Stats banner */
+  .stats-bar {
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+    padding: 28px 24px;
+  }
+  .stats-inner {
+    max-width: 800px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+  }
+  @media (max-width: 600px) {
+    .stats-inner { grid-template-columns: repeat(2, 1fr); }
+  }
+  .stat-card {
+    text-align: center;
+    padding: 16px 12px;
+    background: var(--bg-light);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+  }
+  .stat-number {
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--primary);
+    letter-spacing: -0.5px;
+  }
+  .stat-label {
+    font-size: 11px;
+    color: var(--text-mid);
+    font-weight: 600;
+    margin-top: 2px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  /* Content */
+  .content {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+  }
+
+  /* Alert card */
+  .alert-card {
+    background: var(--primary-soft);
+    border-left: 4px solid var(--primary);
+    border-radius: 0 10px 10px 0;
+    padding: 20px 24px;
+    margin-bottom: 36px;
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--text-dark);
+  }
+  .alert-card strong { color: var(--text-black); }
+
+  /* Sections */
+  .section { margin-bottom: 40px; }
+  .section-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--primary);
+    margin-bottom: 10px;
+  }
+  .section h2 {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--text-black);
+    margin-bottom: 14px;
+    letter-spacing: -0.3px;
+  }
+  .section h3 {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--text-black);
+    margin-bottom: 10px;
+    margin-top: 20px;
+  }
+  .section p {
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--text-dark);
+    margin-bottom: 12px;
+  }
+  .section p a {
+    color: var(--primary);
+    font-weight: 600;
+    text-decoration: none;
+    border-bottom: 1.5px solid rgba(209, 71, 24, 0.3);
+    transition: border-color 0.2s;
+  }
+  .section p a:hover { border-color: var(--primary); }
+
+  /* Phase timeline */
+  .phase-block {
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 16px;
+    transition: box-shadow 0.2s;
+  }
+  .phase-block:hover {
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+  }
+  .phase-header {
+    padding: 18px 24px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    cursor: pointer;
+    background: var(--bg);
+    user-select: none;
+  }
+  .phase-header:hover { background: var(--bg-light); }
+  .phase-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: 800;
+    flex-shrink: 0;
+  }
+  .phase-icon.orange { background: var(--primary-soft); color: var(--primary); }
+  .phase-icon.green { background: var(--green-soft); color: var(--green); }
+  .phase-icon.blue { background: var(--blue-soft); color: var(--blue); }
+  .phase-icon.purple { background: var(--purple-soft); color: var(--purple); }
+  .phase-meta {
+    flex: 1;
+  }
+  .phase-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text-black);
+  }
+  .phase-dates {
+    font-size: 12px;
+    color: var(--text-light);
+    font-weight: 500;
+    margin-top: 2px;
+  }
+  .phase-arrow {
+    font-size: 14px;
+    color: var(--text-light);
+    transition: transform 0.3s;
+  }
+  .phase-arrow.open { transform: rotate(180deg); }
+  .phase-content {
+    display: none;
+    padding: 0 24px 24px;
+    background: var(--bg);
+  }
+  .phase-content.open { display: block; }
+
+  /* Task list */
+  .task-group {
+    margin-bottom: 16px;
+  }
+  .task-group-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-black);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .task-list {
+    list-style: none;
+    padding: 0;
+  }
+  .task-list li {
+    position: relative;
+    padding: 8px 12px 8px 32px;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--text-dark);
+    background: var(--bg-light);
+    border-radius: 8px;
+    margin-bottom: 6px;
+    border: 1px solid transparent;
+    transition: border-color 0.2s;
+  }
+  .task-list li:hover {
+    border-color: var(--border);
+  }
+  .task-list li::before {
+    content: '';
+    position: absolute;
+    left: 12px;
+    top: 14px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    border: 2px solid var(--primary);
+    background: var(--primary-medium);
+  }
+
+  /* KPI cards */
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 12px;
+  }
+  @media (max-width: 600px) {
+    .kpi-grid { grid-template-columns: 1fr; }
+  }
+  .kpi-card {
+    padding: 16px 18px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .kpi-card:hover {
+    border-color: var(--primary);
+    box-shadow: 0 2px 12px rgba(209, 71, 24, 0.08);
+  }
+  .kpi-card .kpi-name {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-mid);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+  }
+  .kpi-card .kpi-target {
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--text-black);
+    letter-spacing: -0.5px;
+  }
+  .kpi-card .kpi-from {
+    font-size: 12px;
+    color: var(--text-light);
+    margin-top: 2px;
+  }
+
+  /* Quote/Philosophy */
+  .philosophy-card {
+    background: var(--bg);
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-bottom: 12px;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+  .philosophy-card .phil-icon {
+    font-size: 24px;
+    flex-shrink: 0;
+  }
+  .philosophy-card .phil-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-black);
+    margin-bottom: 4px;
+  }
+  .philosophy-card .phil-desc {
+    font-size: 13px;
+    color: var(--text-mid);
+    line-height: 1.6;
+  }
+
+  /* Offer box */
+  .offer-box {
+    background: var(--bg);
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .offer-row {
+    display: flex;
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--border);
+    align-items: center;
+  }
+  .offer-row:last-child { border-bottom: none; }
+  .offer-label {
+    width: 160px;
+    flex-shrink: 0;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-black);
+  }
+  .offer-value {
+    font-size: 13px;
+    color: var(--text-dark);
+    flex: 1;
+  }
+
+  /* Books grid */
+  .books-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-top: 12px;
+  }
+  @media (max-width: 600px) {
+    .books-grid { grid-template-columns: 1fr 1fr; }
+  }
+  .book-item {
+    padding: 12px 14px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    text-align: center;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-dark);
+    line-height: 1.4;
+    transition: border-color 0.2s;
+  }
+  .book-item:hover { border-color: var(--primary); }
+  .book-item .book-emoji {
+    font-size: 22px;
+    display: block;
+    margin-bottom: 6px;
+  }
+  .book-item .book-author {
+    font-size: 11px;
+    font-weight: 400;
+    color: var(--text-light);
+    margin-top: 2px;
+  }
+
+  /* Divider */
+  .divider {
+    height: 1px;
+    background: var(--border);
+    margin: 36px 0;
+  }
+
+  /* Footer */
+  .footer {
+    text-align: center;
+    padding: 32px 24px;
+    font-size: 12px;
+    color: var(--text-light);
+    border-top: 1px solid var(--border);
+    margin-top: 40px;
+  }
+  .footer a { color: var(--primary); text-decoration: none; }
+  .footer-tag {
+    display: inline-block;
+    background: var(--primary-soft);
+    color: var(--primary);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 4px;
+    margin-bottom: 8px;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <div>
+      <div class="logo"><span>PME</span><span>BTP</span></div>
+      <div class="logo-sub">Service Emploi spécialisé depuis 27 ans</div>
+    </div>
+    <div class="header-tag">Document interne</div>
+  </div>
+</div>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-badge">Playbook CSM</div>
+    <h1>Customer Success :<br>les 100 premiers jours</h1>
+    <p class="hero-sub">Plan d'action pour réduire le churn, améliorer le produit, le service et l'expérience client — et passer de 700 à 1 000 clients actifs d'ici fin 2026.</p>
+  </div>
+</div>
+
+<!-- Stats -->
+<div class="stats-bar">
+  <div class="stats-inner">
+    <div class="stat-card">
+      <div class="stat-number">700</div>
+      <div class="stat-label">Clients actifs</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">33%</div>
+      <div class="stat-label">Churn brut annuel</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">1 300€</div>
+      <div class="stat-label">Panier moyen / an</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">~850K€</div>
+      <div class="stat-label">CA annuel</div>
+    </div>
+  </div>
+</div>
+
+<div class="content">
+
+  <!-- Constat -->
+  <div class="alert-card">
+    <strong>Le constat :</strong> L'entreprise a 3 commerciaux et 0 CSM. On vend, on vend, on vend — mais on ne délivre pas derrière. Résultat : on perd environ 20 clients par mois. L'organigramme actuel ne correspond pas à un SaaS moderne. Il manque tout le pôle Customer Success. Ce playbook pose les fondations pour le construire.
+  </div>
+
+  <!-- Diagnostic -->
+  <div class="section">
+    <div class="section-label">Diagnostic</div>
+    <h2>Où on en est</h2>
+    <p>PME BTP est le leader français des jobboards spécialisés BTP, avec 27 ans d'ancienneté, 20 000 anciens clients et 700 clients actifs aujourd'hui. Le produit est un abonnement annuel (à partir de 990€) pour les recruteurs du BTP.</p>
+    <p>Le problème est clair : le churn brut est à 33%. On perd environ 20 clients par mois et on en gagne environ 20. Le CA est passé de 1,1M€ à ~850K€ en 3 ans. La base clients est composée à 70% de TPE de moins de 20 salariés, dont la moitié a moins de 10 salariés — une cible volatile par nature.</p>
+    <p>Il n'existe aucun process d'onboarding, aucun suivi client structuré, aucun dashboard de santé client, aucune automation de rétention. Le service client se résume à de l'administratif et des relances. C'est exactement là qu'on doit agir.</p>
+  </div>
+
+  <!-- Objectifs -->
+  <div class="section">
+    <div class="section-label">Objectifs</div>
+    <h2>Ce qu'on vise à fin 2026</h2>
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-name">Churn brut annuel</div>
+        <div class="kpi-target">≤ 10%</div>
+        <div class="kpi-from">Aujourd'hui : 33%</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-name">Clients actifs</div>
+        <div class="kpi-target">1 000</div>
+        <div class="kpi-from">Aujourd'hui : 700</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-name">NPS client</div>
+        <div class="kpi-target">≥ 50</div>
+        <div class="kpi-from">Aujourd'hui : non mesuré</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-name">Taux de renouvellement</div>
+        <div class="kpi-target">≥ 90%</div>
+        <div class="kpi-from">Aujourd'hui : ~67%</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Philosophie -->
+  <div class="section">
+    <div class="section-label">Philosophie</div>
+    <h2>Nos principes directeurs</h2>
+
+    <div class="philosophy-card">
+      <div class="phil-icon">🎯</div>
+      <div>
+        <div class="phil-title">80/20 partout</div>
+        <div class="phil-desc">20% de nos clients génèrent 80% de notre revenu. 20% de nos actions produiront 80% des résultats. On identifie ces leviers et on se concentre dessus. On ne disperse pas l'énergie.</div>
+      </div>
+    </div>
+
+    <div class="philosophy-card">
+      <div class="phil-icon">🔄</div>
+      <div>
+        <div class="phil-title">Le churn se résout par le produit et le service, pas par le commercial</div>
+        <div class="phil-desc">On ne peut pas "vendre" la rétention. Un client reste parce que le produit est indispensable et que le service est irréprochable. Le CSM est le gardien de cette promesse.</div>
+      </div>
+    </div>
+
+    <div class="philosophy-card">
+      <div class="phil-icon">🗣️</div>
+      <div>
+        <div class="phil-title">Parler aux clients avant de décider quoi que ce soit</div>
+        <div class="phil-desc">Inspiré de "Talking to Humans" : chaque décision produit et service doit être validée par de vraies conversations avec de vrais clients, anciens clients et prospects. Pas d'intuition, des données.</div>
+      </div>
+    </div>
+
+    <div class="philosophy-card">
+      <div class="phil-icon">♾️</div>
+      <div>
+        <div class="phil-title">Des clients "for life"</div>
+        <div class="phil-desc">Inspiré de "Never Lose a Customer Again" : chaque interaction est une opportunité de créer un client à vie. L'onboarding, le support, le suivi — chaque touchpoint doit être exceptionnel.</div>
+      </div>
+    </div>
+
+    <div class="philosophy-card">
+      <div class="phil-icon">📐</div>
+      <div>
+        <div class="phil-title">Redéfinir l'ICP</div>
+        <div class="phil-desc">Nos clients les plus volatiles sont les TPE de moins de 10 salariés. Notre cible idéale : des entreprises de 10 à 200 salariés avec un besoin de recrutement récurrent. Un client qui recrute tout le temps renouvelle tout le temps.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- Les 100 jours -->
+  <div class="section">
+    <div class="section-label">Plan d'action</div>
+    <h2>Les 100 premiers jours</h2>
+    <p>Le plan est structuré en 4 phases. Chaque phase a des objectifs clairs et des livrables concrets.</p>
+
+    <!-- Phase 1 -->
+    <div class="phase-block" onclick="togglePhase(this)">
+      <div class="phase-header">
+        <div class="phase-icon orange">1</div>
+        <div class="phase-meta">
+          <div class="phase-title">Audit & Discovery</div>
+          <div class="phase-dates">Jours 1–25 · Comprendre avant d'agir</div>
+        </div>
+        <div class="phase-arrow">▼</div>
+      </div>
+      <div class="phase-content">
+        <div class="task-group">
+          <div class="task-group-title">🔍 Audit interne</div>
+          <ul class="task-list">
+            <li>Mapper l'intégralité du parcours client actuel : de la vente à la facturation, en passant par l'onboarding (ou l'absence d'onboarding)</li>
+            <li>Analyser les données de churn des 3 dernières années : qui part, quand, pourquoi, quel profil, quel panier moyen</li>
+            <li>Identifier les cohortes : clients fidèles (3+ ans) vs. clients one-shot. Qu'est-ce qui les différencie ?</li>
+            <li>Segmenter la base : par taille d'entreprise, par secteur BTP, par panier moyen, par ancienneté</li>
+            <li>Auditer les outils existants : CRM, facturation, support — documenter tout ce qui existe (ou n'existe pas)</li>
+            <li>Cartographier la concurrence : qui sont-ils, que proposent-ils, pourquoi certains clients partent chez eux</li>
+          </ul>
+        </div>
+
+        <div class="task-group">
+          <div class="task-group-title">📞 Interviews clients actifs (30 à 50 appels)</div>
+          <ul class="task-list">
+            <li>Appeler un échantillon représentatif des 700 clients actifs (mix tailles, ancienneté, panier)</li>
+            <li>Questions clés : Pourquoi êtes-vous chez PME BTP ? Qu'est-ce qui vous plaît ? Qu'est-ce qui vous manque ? Qu'est-ce qui vous ferait partir ? Recommanderiez-vous PME BTP ? (NPS)</li>
+            <li>Identifier les "power users" : ceux qui tirent le plus de valeur du produit. Comprendre pourquoi.</li>
+            <li>Documenter chaque appel de manière structurée dans un template Notion</li>
+          </ul>
+        </div>
+
+        <div class="task-group">
+          <div class="task-group-title">📴 Interviews anciens clients (20 à 30 appels)</div>
+          <ul class="task-list">
+            <li>Appeler des clients qui ont churné dans les 12 derniers mois</li>
+            <li>Questions clés : Pourquoi êtes-vous parti ? Qu'est-ce qui aurait pu vous retenir ? Qu'utilisez-vous maintenant ? Que faudrait-il pour que vous reveniez ?</li>
+            <li>Catégoriser les raisons de départ : prix, produit, service, besoin ponctuel, concurrent</li>
+          </ul>
+        </div>
+
+        <div class="task-group">
+          <div class="task-group-title">🎯 Interviews prospects (10 à 15 appels)</div>
+          <ul class="task-list">
+            <li>Parler à des entreprises BTP qui ne sont pas clientes</li>
+            <li>Questions clés : Comment recrutez-vous aujourd'hui ? Connaissez-vous PME BTP ? Qu'est-ce qui vous ferait souscrire ? Quel est votre budget recrutement ?</li>
+            <li>Identifier les freins à l'achat et les attentes non couvertes</li>
+          </ul>
+        </div>
+
+        <p style="margin-top: 16px; font-size: 14px; color: var(--text-mid);"><strong>Livrables Phase 1 :</strong> Rapport d'audit complet · Synthèse des interviews · Segmentation client · Carte des raisons de churn · Première version de l'ICP affiné · NPS baseline</p>
+      </div>
+    </div>
+
+    <!-- Phase 2 -->
+    <div class="phase-block" onclick="togglePhase(this)">
+      <div class="phase-header">
+        <div class="phase-icon green">2</div>
+        <div class="phase-meta">
+          <div class="phase-title">Quick Wins & Fondations</div>
+          <div class="phase-dates">Jours 25–50 · Les premières victoires</div>
+        </div>
+        <div class="phase-arrow">▼</div>
+      </div>
+      <div class="phase-content">
+        <div class="task-group">
+          <div class="task-group-title">🚨 Actions anti-churn immédiates</div>
+          <ul class="task-list">
+            <li>Mettre en place un système d'alerte churn : identifier les signaux faibles (baisse d'utilisation, pas de connexion depuis X jours, pas de candidature reçue)</li>
+            <li>Créer un "rescue playbook" : process précis quand un client montre des signes de départ — qui appelle, quand, avec quel message</li>
+            <li>Contacter personnellement les 50 clients les plus à risque de churn dans les 3 prochains mois</li>
+            <li>Mettre en place un suivi de renouvellement : alerte à J-90, J-60, J-30 avant expiration de chaque abonnement</li>
+          </ul>
+        </div>
+
+        <div class="task-group">
+          <div class="task-group-title">🎬 Onboarding client (le chantier n°1)</div>
+          <ul class="task-list">
+            <li>Créer un parcours d'onboarding structuré pour chaque nouveau client : email de bienvenue → appel de setup → check-in J+7 → check-in J+30</li>
+            <li>Produire les assets : guide de démarrage, tutoriels vidéo, checklist "votre première offre d'emploi en 10 minutes"</li>
+            <li>Définir les "activation milestones" : quels sont les gestes qui prouvent qu'un client tire de la valeur ? (ex : première offre publiée, premier CV reçu, première embauche via PME BTP)</li>
+            <li>Coordonner avec le CTO pour automatiser les emails d'onboarding et les triggers dans la plateforme</li>
+          </ul>
+        </div>
+
+        <div class="task-group">
+          <div class="task-group-title">📊 Dashboards & outils</div>
+          <ul class="task-list">
+            <li>Mettre en place un Health Score client : score de 0 à 100 basé sur l'utilisation, le nombre de candidatures reçues, la satisfaction, l'ancienneté</li>
+            <li>Dashboard CSM dans Notion ou outil dédié : vue par client, alertes, pipeline de renouvellement, NPS</li>
+            <li>Connecter les données produit (utilisation, connexions, offres publiées) aux données commerciales (panier, ancienneté, renouvellement)</li>
+            <li>Travailler avec Axel (CTO) pour les intégrations techniques et les automatisations</li>
+          </ul>
+        </div>
+
+        <div class="task-group">
+          <div class="task-group-title">📐 Redéfinition de l'ICP</div>
+          <ul class="task-list">
+            <li>Croiser les données d'audit avec la segmentation : quels profils clients ont le meilleur taux de rétention ?</li>
+            <li>Définir l'ICP affiné : hypothèse de départ = entreprises BTP de 10 à 200 salariés avec un besoin de recrutement récurrent</li>
+            <li>Calculer la LTV par segment pour valider l'ICP</li>
+            <li>Aligner l'équipe commerciale sur le nouvel ICP : on ne vend plus à tout le monde, on vend aux bons clients</li>
+          </ul>
+        </div>
+
+        <p style="margin-top: 16px; font-size: 14px; color: var(--text-mid);"><strong>Livrables Phase 2 :</strong> Process d'onboarding documenté · Health Score en place · Dashboard CSM opérationnel · ICP affiné et validé · Rescue playbook · Alerte renouvellement automatisée</p>
+      </div>
+    </div>
+
+    <!-- Phase 3 -->
+    <div class="phase-block" onclick="togglePhase(this)">
+      <div class="phase-header">
+        <div class="phase-icon blue">3</div>
+        <div class="phase-meta">
+          <div class="phase-title">Scale & Systématiser</div>
+          <div class="phase-dates">Jours 50–80 · Industrialiser la rétention</div>
+        </div>
+        <div class="phase-arrow">▼</div>
+      </div>
+      <div class="phase-content">
+        <div class="task-group">
+          <div class="task-group-title">🔄 Cycle de vie client complet</div>
+          <ul class="task-list">
+            <li>Documenter et automatiser le cycle complet : Acquisition → Onboarding → Adoption → Expansion → Renouvellement → Advocacy</li>
+            <li>Créer des séquences email automatisées à chaque étape clé du cycle de vie (coordonnées avec le CTO)</li>
+            <li>Mettre en place des check-ins trimestriels pour les clients premium (top 20% en valeur)</li>
+            <li>Créer un programme de "win-back" pour les anciens clients : offre de retour, nouveau produit, démo de la nouvelle plateforme</li>
+          </ul>
+        </div>
+
+        <div class="task-group">
+          <div class="task-group-title">💡 Feedback loop produit</div>
+          <ul class="task-list">
+            <li>Structurer un process de remontée des feedbacks clients vers l'équipe produit/tech</li>
+            <li>Prioriser les demandes de fonctionnalités par impact sur la rétention (80/20)</li>
+            <li>Organiser des sessions de beta-testing de la nouvelle plateforme avec les clients les plus engagés</li>
+            <li>Créer un "Advisory Board" informel : 5-10 clients fidèles qui donnent du feedback régulier</li>
+          </ul>
+        </div>
+
+        <div class="task-group">
+          <div class="task-group-title">📈 Optimisation commerciale (support au Sales)</div>
+          <ul class="task-list">
+            <li>Créer des cas clients / témoignages pour aider l'équipe commerciale à closer</li>
+            <li>Fournir des données de succès client aux commerciaux : "nos clients reçoivent en moyenne X candidatures par mois"</li>
+            <li>Améliorer le process de démo produit en se basant sur les retours clients</li>
+            <li>Identifier les opportunités d'upsell sur la base existante : clients sous-équipés qui pourraient monter en gamme</li>
+          </ul>
+        </div>
+
+        <p style="margin-top: 16px; font-size: 14px; color: var(--text-mid);"><strong>Livrables Phase 3 :</strong> Cycle de vie automatisé · Programme win-back · Feedback loop structuré · Cas clients · Process d'upsell · Advisory Board lancé</p>
+      </div>
+    </div>
+
+    <!-- Phase 4 -->
+    <div class="phase-block" onclick="togglePhase(this)">
+      <div class="phase-header">
+        <div class="phase-icon purple">4</div>
+        <div class="phase-meta">
+          <div class="phase-title">Mesurer & Itérer</div>
+          <div class="phase-dates">Jours 80–100 · Ancrer les résultats</div>
+        </div>
+        <div class="phase-arrow">▼</div>
+      </div>
+      <div class="phase-content">
+        <div class="task-group">
+          <div class="task-group-title">📊 Bilan et KPI</div>
+          <ul class="task-list">
+            <li>Mesurer l'évolution du churn depuis le début de la mission : tendance, projection annualisée</li>
+            <li>Mesurer le NPS et comparer avec le baseline du jour 1</li>
+            <li>Analyser le taux d'activation des nouveaux clients onboardés vs. les anciens</li>
+            <li>Calculer le ROI des actions mises en place : combien de clients sauvés, combien de revenus préservés</li>
+          </ul>
+        </div>
+
+        <div class="task-group">
+          <div class="task-group-title">📋 Documentation & transfert</div>
+          <ul class="task-list">
+            <li>Documenter l'intégralité des process CSM dans Notion : onboarding, health score, alertes, renouvellement, win-back</li>
+            <li>Créer un "CSM handbook" pour permettre à un futur CSM interne de prendre le relais</li>
+            <li>Former l'équipe existante (commerciaux, admin) aux basics du customer success</li>
+            <li>Recommandations pour la suite : recrutement CSM interne, budget outils, objectifs S2 2026</li>
+          </ul>
+        </div>
+
+        <div class="task-group">
+          <div class="task-group-title">🚀 Préparer la scale</div>
+          <ul class="task-list">
+            <li>Définir le profil du futur CSM interne (ou confirmer le freelance en long terme)</li>
+            <li>Poser les objectifs S2 : 1 000 clients fin 2026, churn sous les 15%, NPS au-dessus de 50</li>
+            <li>Préparer le terrain pour le futur CEO opérationnel qui prendra le relais en 2027</li>
+          </ul>
+        </div>
+
+        <p style="margin-top: 16px; font-size: 14px; color: var(--text-mid);"><strong>Livrables Phase 4 :</strong> Bilan chiffré de la mission · CSM handbook · Recommandations stratégiques · Roadmap S2 2026 · Équipe formée</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- KPIs de suivi -->
+  <div class="section">
+    <div class="section-label">Tableau de bord</div>
+    <h2>KPIs de suivi hebdomadaire</h2>
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-name">Churn mensuel</div>
+        <div class="kpi-target">Objectif : &lt; 1%</div>
+        <div class="kpi-from">Auj. : ~2,8% / mois</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-name">Taux d'activation J+30</div>
+        <div class="kpi-target">Objectif : &gt; 80%</div>
+        <div class="kpi-from">Auj. : non mesuré</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-name">NPS</div>
+        <div class="kpi-target">Objectif : ≥ 50</div>
+        <div class="kpi-from">Auj. : non mesuré</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-name">Health Score moyen</div>
+        <div class="kpi-target">Objectif : &gt; 70/100</div>
+        <div class="kpi-from">Auj. : non mesuré</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-name">Clients contactés / mois</div>
+        <div class="kpi-target">Objectif : 100%</div>
+        <div class="kpi-from">Auj. : ~0%</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-name">Renouvellements sécurisés</div>
+        <div class="kpi-target">Objectif : &gt; 90%</div>
+        <div class="kpi-from">Auj. : ~67%</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- Bibliothèque -->
+  <div class="section">
+    <div class="section-label">Références</div>
+    <h2>La bibliothèque du CSM PME BTP</h2>
+    <p>Les méthodologies et frameworks qui inspirent notre approche. Le CSM qui rejoint la mission doit être familier avec ces ouvrages.</p>
+    <div class="books-grid">
+      <div class="book-item">
+        <span class="book-emoji">📘</span>
+        Customer Success
+        <div class="book-author">Nick Mehta</div>
+      </div>
+      <div class="book-item">
+        <span class="book-emoji">🗣️</span>
+        Talking to Humans
+        <div class="book-author">Giff Constable</div>
+      </div>
+      <div class="book-item">
+        <span class="book-emoji">🚀</span>
+        SaaS Playbook
+        <div class="book-author">Rob Walling</div>
+      </div>
+      <div class="book-item">
+        <span class="book-emoji">📌</span>
+        Retention Point
+        <div class="book-author">Robert Skrob</div>
+      </div>
+      <div class="book-item">
+        <span class="book-emoji">♾️</span>
+        Never Lose a Customer Again
+        <div class="book-author">Joey Coleman</div>
+      </div>
+      <div class="book-item">
+        <span class="book-emoji">⚡</span>
+        Buy Back Your Time
+        <div class="book-author">Dan Martell</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <div class="footer-tag">Confidentiel — PME BTP</div><br>
+    <a href="https://www.pmebtp.com" target="_blank">PME BTP</a> · Playbook Customer Success · Mars 2026
+  </div>
+
+</div>
+
+<script>
+function togglePhase(block) {
+  const content = block.querySelector('.phase-content');
+  const arrow = block.querySelector('.phase-arrow');
+  const isOpen = content.classList.contains('open');
+  
+  // Close all
+  document.querySelectorAll('.phase-content').forEach(c => c.classList.remove('open'));
+  document.querySelectorAll('.phase-arrow').forEach(a => a.classList.remove('open'));
+  
+  // Toggle this one
+  if (!isOpen) {
+    content.classList.add('open');
+    arrow.classList.add('open');
+  }
+}
+
+// Open first phase by default
+document.addEventListener('DOMContentLoaded', () => {
+  const first = document.querySelector('.phase-block');
+  if (first) togglePhase(first);
+});
+</script>
+
+</body>
+</html>
