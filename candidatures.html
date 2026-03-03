@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PME BTP — Suivi Candidatures</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="/header.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.9/babel.min.js"></script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --primary: #d14718;
+    --primary-soft: #fdf2ee;
+    --primary-medium: rgba(209, 71, 24, 0.12);
+    --text-black: #111;
+    --text-dark: #333;
+    --text-mid: #666;
+    --text-light: #999;
+    --border: #e5e5e5;
+    --bg: #ffffff;
+    --bg-light: #fafafa;
+    --green: #1a7a4c;
+    --green-soft: #edf7f1;
+    --blue: #1a5276;
+    --blue-soft: #eaf2f8;
+    --purple: #6c3483;
+    --purple-soft: #f4ecf7;
+    --red: #c0392b;
+    --red-soft: #fdecea;
+    --gold: #b7950b;
+    --gold-soft: #fef9e7;
+  }
+  body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background: var(--bg-light);
+    color: var(--text-dark);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  #ats-root { padding: 24px; max-width: 100%; }
+
+  /* Top bar */
+  .ats-topbar {
+    max-width: 1400px;
+    margin: 0 auto 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .ats-title { font-size: 20px; font-weight: 800; color: var(--text-black); letter-spacing: -0.3px; }
+  .ats-title span { color: var(--primary); }
+  .ats-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+  .ats-btn {
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    color: var(--text-dark);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .ats-btn:hover { border-color: var(--primary); color: var(--primary); }
+  .ats-btn-primary {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+  }
+  .ats-btn-primary:hover { background: #b83d14; color: white; }
+  .ats-filter {
+    font-family: inherit;
+    font-size: 13px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    color: var(--text-dark);
+    cursor: pointer;
+    appearance: auto;
+  }
+  .ats-stats { display: flex; gap: 16px; flex-wrap: wrap; }
+  .ats-stat { font-size: 13px; color: var(--text-mid); }
+  .ats-stat strong { color: var(--text-black); font-weight: 700; }
+
+  /* Kanban */
+  .kanban {
+    display: flex;
+    gap: 12px;
+    max-width: 1400px;
+    margin: 0 auto;
+    overflow-x: auto;
+    padding-bottom: 20px;
+  }
+  .kanban-col {
+    min-width: 240px;
+    flex: 1;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    max-height: calc(100vh - 200px);
+  }
+  .kanban-col-header {
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+  }
+  .kanban-col-title {
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .kanban-col-count {
+    font-size: 11px;
+    font-weight: 700;
+    color: white;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .kanban-col-body {
+    padding: 10px;
+    flex: 1;
+    overflow-y: auto;
+  }
+
+  /* Cards */
+  .k-card {
+    background: var(--bg);
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: 14px;
+    margin-bottom: 8px;
+    cursor: pointer;
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+  .k-card:hover { border-color: var(--primary); box-shadow: 0 2px 12px rgba(209,71,24,0.08); }
+  .k-card-name { font-size: 14px; font-weight: 700; color: var(--text-black); margin-bottom: 4px; }
+  .k-card-poste { font-size: 12px; font-weight: 600; color: var(--primary); margin-bottom: 6px; }
+  .k-card-meta { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 6px; }
+  .k-tag {
+    font-size: 10px;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 4px;
+    letter-spacing: 0.3px;
+  }
+  .k-tag-malt { background: #fff0e6; color: #e67e22; }
+  .k-tag-email { background: var(--blue-soft); color: var(--blue); }
+  .k-tag-linkedin { background: #e8f4fd; color: #0077b5; }
+  .k-tag-autre { background: var(--bg-light); color: var(--text-mid); }
+  .k-card-date { font-size: 11px; color: var(--text-light); }
+  .k-card-note { font-size: 12px; color: var(--text-mid); margin-top: 6px; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .k-card-score { margin-top: 6px; font-size: 13px; letter-spacing: 1px; }
+  .k-card-link { display: inline-block; margin-top: 6px; font-size: 11px; color: var(--primary); text-decoration: none; font-weight: 600; }
+  .k-card-link:hover { text-decoration: underline; }
+  .k-card-tjm { font-size: 11px; color: var(--text-mid); font-weight: 600; margin-top: 4px; }
+
+  /* Modal */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.4);
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }
+  .modal {
+    background: var(--bg);
+    border-radius: 14px;
+    width: 100%;
+    max-width: 520px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+  }
+  .modal-header {
+    padding: 20px 24px 16px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .modal-title { font-size: 18px; font-weight: 700; color: var(--text-black); }
+  .modal-close {
+    width: 32px; height: 32px; border-radius: 8px; border: none;
+    background: var(--bg-light); cursor: pointer; font-size: 16px;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--text-mid); transition: background 0.15s;
+  }
+  .modal-close:hover { background: var(--border); }
+  .modal-body { padding: 20px 24px; }
+  .modal-footer {
+    padding: 16px 24px 20px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+  }
+  .field { margin-bottom: 16px; }
+  .field label {
+    display: block;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-black);
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .field input, .field select, .field textarea {
+    width: 100%;
+    font-family: inherit;
+    font-size: 14px;
+    padding: 10px 14px;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    color: var(--text-dark);
+    background: var(--bg);
+    transition: border-color 0.15s;
+  }
+  .field input:focus, .field select:focus, .field textarea:focus {
+    outline: none;
+    border-color: var(--primary);
+  }
+  .field textarea { resize: vertical; min-height: 80px; }
+  .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .star-input { display: flex; gap: 4px; cursor: pointer; }
+  .star-input span { font-size: 22px; transition: transform 0.1s; }
+  .star-input span:hover { transform: scale(1.2); }
+
+  .ats-btn-danger { background: var(--red-soft); color: var(--red); border-color: transparent; }
+  .ats-btn-danger:hover { background: var(--red); color: white; }
+
+  /* Move buttons */
+  .k-card-moves { display: flex; gap: 4px; margin-top: 8px; }
+  .k-move-btn {
+    font-family: inherit;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 4px 8px;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+    background: var(--bg-light);
+    color: var(--text-mid);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .k-move-btn:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-soft); }
+
+  /* Empty state */
+  .k-empty { text-align: center; padding: 20px 10px; font-size: 13px; color: var(--text-light); }
+
+  @media (max-width: 768px) {
+    .kanban { flex-direction: column; }
+    .kanban-col { min-width: 100%; max-height: none; }
+    .field-row { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div id="ats-root"></div>
+<script type="text/babel">
+const { useState, useEffect, useCallback } = React;
+
+const STATUTS = [
+  { id: 'nouveau', label: 'Nouveau', color: '#d14718', bg: '#fdf2ee' },
+  { id: 'screening', label: 'Screening', color: '#1a5276', bg: '#eaf2f8' },
+  { id: 'entretien', label: 'Entretien', color: '#6c3483', bg: '#f4ecf7' },
+  { id: 'offre', label: 'Offre', color: '#b7950b', bg: '#fef9e7' },
+  { id: 'embauche', label: 'Embauché', color: '#1a7a4c', bg: '#edf7f1' },
+  { id: 'refuse', label: 'Refusé', color: '#c0392b', bg: '#fdecea' },
+];
+
+const POSTES = ['CSM', 'Commercial', 'Chief of Staff', 'Autre'];
+const SOURCES = ['Malt', 'Email', 'LinkedIn', 'Autre'];
+
+const STORAGE_KEY = 'pmebtp_ats_v2';
+
+function loadCandidats() {
+  try {
+    const data = localStorage.getItem(STORAGE_KEY);
+    return data ? JSON.parse(data) : [];
+  } catch { return []; }
+}
+
+function saveCandidats(c) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(c));
+}
+
+function genId() {
+  return Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+}
+
+function formatDate(d) {
+  if (!d) return '';
+  const date = new Date(d);
+  return date.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' });
+}
+
+function StarRating({ value, onChange, readonly }) {
+  return (
+    <div className="star-input">
+      {[1,2,3,4,5].map(i => (
+        <span
+          key={i}
+          onClick={() => !readonly && onChange && onChange(i === value ? 0 : i)}
+          style={{ cursor: readonly ? 'default' : 'pointer', opacity: i <= value ? 1 : 0.25 }}
+        >★</span>
+      ))}
+    </div>
+  );
+}
+
+function sourceClass(s) {
+  const map = { Malt: 'k-tag-malt', Email: 'k-tag-email', LinkedIn: 'k-tag-linkedin' };
+  return map[s] || 'k-tag-autre';
+}
+
+function Card({ c, onEdit, onMove, statuts }) {
+  const idx = statuts.findIndex(s => s.id === c.statut);
+  const prev = idx > 0 ? statuts[idx - 1] : null;
+  const next = idx < statuts.length - 1 ? statuts[idx + 1] : null;
+
+  return (
+    <div className="k-card" onClick={() => onEdit(c)}>
+      <div className="k-card-name">{c.nom || 'Sans nom'}</div>
+      <div className="k-card-poste">{c.poste}</div>
+      <div className="k-card-meta">
+        <span className={`k-tag ${sourceClass(c.source)}`}>{c.source}</span>
+        {c.date && <span className="k-card-date">{formatDate(c.date)}</span>}
+      </div>
+      {c.tjm && <div className="k-card-tjm">{c.tjm}</div>}
+      {c.score > 0 && (
+        <div className="k-card-score">
+          {[1,2,3,4,5].map(i => <span key={i} style={{opacity: i <= c.score ? 1 : 0.2}}>★</span>)}
+        </div>
+      )}
+      {c.notes && <div className="k-card-note">{c.notes}</div>}
+      {c.lien && <a className="k-card-link" href={c.lien} target="_blank" rel="noopener" onClick={e => e.stopPropagation()}>Voir profil ↗</a>}
+      <div className="k-card-moves" onClick={e => e.stopPropagation()}>
+        {prev && <button className="k-move-btn" onClick={() => onMove(c.id, prev.id)}>← {prev.label}</button>}
+        {next && <button className="k-move-btn" onClick={() => onMove(c.id, next.id)}>{next.label} →</button>}
+      </div>
+    </div>
+  );
+}
+
+function Modal({ candidat, onSave, onDelete, onClose }) {
+  const isNew = !candidat.id;
+  const [form, setForm] = useState({
+    nom: '', poste: POSTES[0], source: SOURCES[0], statut: 'nouveau',
+    date: new Date().toISOString().slice(0, 10), notes: '', lien: '', score: 0, tjm: '',
+    ...candidat,
+  });
+
+  const set = (k, v) => setForm(f => ({ ...f, [k]: v }));
+
+  return (
+    <div className="modal-overlay" onClick={onClose}>
+      <div className="modal" onClick={e => e.stopPropagation()}>
+        <div className="modal-header">
+          <div className="modal-title">{isNew ? 'Nouveau candidat' : 'Modifier'}</div>
+          <button className="modal-close" onClick={onClose}>✕</button>
+        </div>
+        <div className="modal-body">
+          <div className="field">
+            <label>Nom complet</label>
+            <input value={form.nom} onChange={e => set('nom', e.target.value)} placeholder="Prénom Nom" autoFocus />
+          </div>
+          <div className="field-row">
+            <div className="field">
+              <label>Poste</label>
+              <select value={form.poste} onChange={e => set('poste', e.target.value)}>
+                {POSTES.map(p => <option key={p}>{p}</option>)}
+              </select>
+            </div>
+            <div className="field">
+              <label>Source</label>
+              <select value={form.source} onChange={e => set('source', e.target.value)}>
+                {SOURCES.map(s => <option key={s}>{s}</option>)}
+              </select>
+            </div>
+          </div>
+          <div className="field-row">
+            <div className="field">
+              <label>Statut</label>
+              <select value={form.statut} onChange={e => set('statut', e.target.value)}>
+                {STATUTS.map(s => <option key={s.id} value={s.id}>{s.label}</option>)}
+              </select>
+            </div>
+            <div className="field">
+              <label>Date</label>
+              <input type="date" value={form.date} onChange={e => set('date', e.target.value)} />
+            </div>
+          </div>
+          <div className="field">
+            <label>TJM / Prétentions</label>
+            <input value={form.tjm} onChange={e => set('tjm', e.target.value)} placeholder="Ex: 450€/j, 5K€/mois..." />
+          </div>
+          <div className="field">
+            <label>Lien profil</label>
+            <input value={form.lien} onChange={e => set('lien', e.target.value)} placeholder="https://malt.fr/..." />
+          </div>
+          <div className="field">
+            <label>Évaluation</label>
+            <StarRating value={form.score} onChange={v => set('score', v)} />
+          </div>
+          <div className="field">
+            <label>Notes</label>
+            <textarea value={form.notes} onChange={e => set('notes', e.target.value)} placeholder="Impressions, points clés, prochaines étapes..." />
+          </div>
+        </div>
+        <div className="modal-footer">
+          {!isNew && <button className="ats-btn ats-btn-danger" onClick={() => onDelete(form.id)}>Supprimer</button>}
+          <div style={{flex:1}} />
+          <button className="ats-btn" onClick={onClose}>Annuler</button>
+          <button className="ats-btn ats-btn-primary" onClick={() => onSave({ ...form, id: form.id || genId() })}>
+            {isNew ? 'Ajouter' : 'Enregistrer'}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function App() {
+  const [candidats, setCandidats] = useState(loadCandidats);
+  const [modal, setModal] = useState(null); // null | {} (new) | {id, ...} (edit)
+  const [filterPoste, setFilterPoste] = useState('Tous');
+
+  useEffect(() => { saveCandidats(candidats); }, [candidats]);
+
+  const handleSave = (c) => {
+    setCandidats(prev => {
+      const exists = prev.find(x => x.id === c.id);
+      return exists ? prev.map(x => x.id === c.id ? c : x) : [...prev, c];
+    });
+    setModal(null);
+  };
+
+  const handleDelete = (id) => {
+    if (confirm('Supprimer ce candidat ?')) {
+      setCandidats(prev => prev.filter(x => x.id !== id));
+      setModal(null);
+    }
+  };
+
+  const handleMove = (id, newStatut) => {
+    setCandidats(prev => prev.map(x => x.id === id ? { ...x, statut: newStatut } : x));
+  };
+
+  const filtered = filterPoste === 'Tous' ? candidats : candidats.filter(c => c.poste === filterPoste);
+  const total = candidats.length;
+  const actifs = candidats.filter(c => !['refuse'].includes(c.statut)).length;
+
+  return (
+    <>
+      <div className="ats-topbar">
+        <div>
+          <div className="ats-title"><span>Suivi</span> Candidatures</div>
+          <div className="ats-stats">
+            <span className="ats-stat"><strong>{total}</strong> candidats</span>
+            <span className="ats-stat"><strong>{actifs}</strong> actifs</span>
+          </div>
+        </div>
+        <div className="ats-actions">
+          <select className="ats-filter" value={filterPoste} onChange={e => setFilterPoste(e.target.value)}>
+            <option>Tous</option>
+            {POSTES.map(p => <option key={p}>{p}</option>)}
+          </select>
+          <button className="ats-btn ats-btn-primary" onClick={() => setModal({})}>+ Candidat</button>
+        </div>
+      </div>
+
+      <div className="kanban">
+        {STATUTS.map(statut => {
+          const cards = filtered.filter(c => c.statut === statut.id);
+          return (
+            <div className="kanban-col" key={statut.id}>
+              <div className="kanban-col-header">
+                <span className="kanban-col-title" style={{ color: statut.color }}>{statut.label}</span>
+                <span className="kanban-col-count" style={{ background: statut.color }}>{cards.length}</span>
+              </div>
+              <div className="kanban-col-body">
+                {cards.length === 0 && <div className="k-empty">Aucun candidat</div>}
+                {cards
+                  .sort((a, b) => new Date(b.date) - new Date(a.date))
+                  .map(c => (
+                    <Card key={c.id} c={c} onEdit={setModal} onMove={handleMove} statuts={STATUTS} />
+                  ))
+                }
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      {modal !== null && (
+        <Modal
+          candidat={modal}
+          onSave={handleSave}
+          onDelete={handleDelete}
+          onClose={() => setModal(null)}
+        />
+      )}
+    </>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('ats-root')).render(<App />);
+</script>
+</body>
+</html>

@@ -8,6 +8,8 @@
     { url: '/offre-clement.html', label: 'Offre d\'emploi', tag: 'Offre d\'emploi', title: 'Commercial — Clément' },
     { url: '/playbook-csm.html', label: 'Playbook', tag: 'Playbook', title: 'Customer Success — 100 jours' },
     { url: '/mission-csm.html', label: 'Offre de mission', tag: 'Mission freelance', title: 'CSM — Customer Success Manager' },
+    { url: '/offre-cos.html', label: 'Offre de mission', tag: 'Mission freelance', title: 'Chief of Staff / Dir. Opérations' },
+    { url: '/candidatures.html', label: 'Outil interne', tag: 'Outil interne', title: 'Suivi Candidatures' },
   ];
 
   // Inject shared styles
