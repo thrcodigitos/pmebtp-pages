@@ -1018,7 +1018,7 @@ function ComptaTab() {
             ["Actif immobilisé net", "Créances clients", "Autres créances", "VMP", "Disponibilités"].map((item, i) =>
               React.createElement("div", { key: i, style: { display: "flex", justifyContent: "space-between", padding: "4px 0", borderBottom: "1px solid #f0f0f0" } },
                 React.createElement("span", { style: { color: "#888" } }, item),
-                React.createElement("span", { style: { fontWeight: 600 } }, fmt(BILAN_DATA["31/10/2025"][item]))
+                React.createElement("span", { style: { fontWeight: 600 } }, fmt(data.bilan["31/10/2025"][item]))
               )
             )
           ),
@@ -1027,22 +1027,22 @@ function ComptaTab() {
             ["Capitaux propres", "Emprunts et dettes"].map((item, i) =>
               React.createElement("div", { key: i, style: { display: "flex", justifyContent: "space-between", padding: "4px 0", borderBottom: i === 0 ? "2px solid #d14718" : "none" } },
                 React.createElement("span", { style: { color: "#888", fontWeight: 600 } }, item),
-                React.createElement("span", { style: { fontWeight: 800, color: i === 0 ? "#16a34a" : "#0066cc" } }, fmt(BILAN_DATA["31/10/2025"][item]))
+                React.createElement("span", { style: { fontWeight: 800, color: i === 0 ? "#16a34a" : "#0066cc" } }, fmt(data.bilan["31/10/2025"][item]))
               )
             )
           )
         ),
         React.createElement("div", { style: { marginTop: 12, paddingTop: 12, borderTop: "2px solid #d14718", display: "flex", justifyContent: "space-between", fontWeight: 700 } },
           React.createElement("span", null, "TOTAL"),
-          React.createElement("span", null, fmt(BILAN_DATA["31/10/2025"]["Total actif"]))
+          React.createElement("span", null, fmt(data.bilan["31/10/2025"]["Total actif"]))
         )
       ),
       React.createElement("div", { style: cardStyle },
         React.createElement("h3", { style: { fontFamily: "'DM Serif Display', serif", fontSize: 18, marginBottom: 16 } }, "Variation 31/05 vs 31/10"),
         React.createElement("div", { style: { display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8, fontSize: 11 } },
           ["Actif immobilisé net", "Créances clients", "Disponibilités", "Total actif", "Capitaux propres", "Emprunts et dettes"].map((item, i) => {
-            const val0510 = BILAN_DATA["31/10/2025"][item];
-            const val3105 = BILAN_DATA["31/05/2025"][item];
+            const val0510 = data.bilan["31/10/2025"][item];
+            const val3105 = data.bilan["31/05/2025"][item];
             const change = val0510 - val3105;
             const changePct = val3105 === 0 ? 0 : ((change / val3105) * 100).toFixed(1);
             return React.createElement("div", { key: i, style: { paddingBottom: 8, borderBottom: "1px solid #f0f0f0" } },
@@ -1089,12 +1089,13 @@ function ComptaTab() {
         })
       ),
       React.createElement("div", { style: { display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 8, marginTop: 12, fontSize: 10 } },
-        Object.keys(REVENUE_BREAKDOWN).map((type, i) =>
-          React.createElement("div", { key: i, style: { display: "flex", alignItems: "center", gap: 4 } },
-            React.createElement("div", { style: { width: 8, height: 8, background: colors[type] || "#999", borderRadius: 1, opacity: type === "PCA Situations" ? 0.4 : 1 } }),
+        Object.keys(monthsRev).map((type, i) => {
+          const legendColors = { "Prestations de services": "#d14718", "Espace Annualise": "#ff9800", "Facturation CEE": "#2196f3", "Prestations DOM 8.5%": "#9c27b0", "Facturation Hors CEE": "#4caf50", "Prestations AXP": "#ffc107", "PCA Situations": "#999" };
+          return React.createElement("div", { key: i, style: { display: "flex", alignItems: "center", gap: 4 } },
+            React.createElement("div", { style: { width: 8, height: 8, background: legendColors[type] || "#999", borderRadius: 1, opacity: type === "PCA Situations" ? 0.4 : 1 } }),
             React.createElement("span", { style: { color: "#666" } }, type)
-          )
-        )
+          );
+        })
       )
     ),
 
