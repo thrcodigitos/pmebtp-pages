@@ -98,6 +98,7 @@ input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 20p
   </style>
 </head>
 <body>
+<script src="/header.js"></script>
 <div id="root"></div>
 
 <script>
@@ -1183,19 +1184,11 @@ function App() {
 
   return (
     <div>
-      <div style={{ background: "#fff", borderBottom: "3px solid #d14718", padding: "20px 24px" }}>
+      <div style={{ background: "#fff", borderBottom: "1px solid #e5e5e5", padding: "12px 24px" }}>
         <div style={{ maxWidth: 1100, margin: "0 auto", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-          <div>
-            <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 2 }}>
-              <span style={{ fontFamily: "'Inter', sans-serif", fontSize: 22, letterSpacing: -0.5 }}>
-                <span style={{ color: "#d14718" }}>PME</span><span>BTP</span>
-              </span>
-              <span style={{ fontSize: 11, fontWeight: 700, color: "#d14718", textTransform: "uppercase", letterSpacing: 1.5, background: "rgba(209,71,24,0.08)", padding: "3px 8px", borderRadius: 4 }}>DASHBOARD</span>
-            </div>
-            <p style={{ fontSize: 12, color: "#999" }}>Tableau de bord interne — Clients, CA & Primes</p>
-          </div>
+          <p style={{ fontSize: 12, color: "#999", fontWeight: 500 }}>Tableau de bord interne — Clients, CA & Primes</p>
           <div style={{ display: "flex", gap: 4, background: "#f0efed", borderRadius: 8, padding: 3 }}>
-            {[{ key: "clients", label: "Clients & CA" }, { key: "primes", label: "Primes" }, { key: "tresorerie", label: "Trésorerie" }, { key: "compta", label: "Comptabilité" }].map(t => (
+            {[{ key: "clients", label: "Clients & CA" }, { key: "primes", label: "Primes" }, { key: "tresorerie", label: "Trésorerie" }, { key: "compta", label: "Comptabilité" }, { key: "finances", label: "Finances" }].map(t => (
               <button key={t.key} onClick={() => setMainTab(t.key)} style={{
                 padding: "8px 20px", borderRadius: 6, border: "none",
                 background: mainTab === t.key ? "#fff" : "transparent",
@@ -1213,6 +1206,11 @@ function App() {
         {mainTab === "primes" && <PrimesTab />}
         {mainTab === "tresorerie" && <TresorerieTab />}
         {mainTab === "compta" && <ComptaTab />}
+        {mainTab === "finances" && (
+          <div style={{ margin: "-20px -24px -40px", overflow: "hidden" }}>
+            <iframe src="/kaki-dashboard.html?embed=1" style={{ width: "100%", height: "calc(100vh - 120px)", border: "none" }} />
+          </div>
+        )}
       </div>
 
       <div style={{ maxWidth: 1100, margin: "0 auto", padding: "0 24px 32px", textAlign: "center" }}>
