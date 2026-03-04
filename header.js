@@ -12,6 +12,7 @@
     { url: '/candidatures.html', label: 'Outil interne', tag: 'Outil interne', title: 'Suivi Candidatures' },
     { url: '/kaki-dashboard.html', label: 'Due Diligence', tag: 'Due Diligence', title: 'KAKI — Dashboard Financier' },
     { url: '/pmebtp-dashboard.html', label: 'Analyse CA', tag: 'Analyse CA', title: 'Clients & CA — Dashboard' },
+    { url: '/kaki-compta.html', label: 'Due Diligence', tag: 'Due Diligence', title: 'KAKI — Comptabilité 3 ans' },
   ];
 
   // Inject shared styles

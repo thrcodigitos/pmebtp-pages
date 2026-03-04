@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KAKI — Comptabilité 3 ans</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="/header.js" defer></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',system-ui,sans-serif;background:#fafafa;color:#333}
+.wrap{max-width:1100px;margin:0 auto;padding:24px}
+h1{font-size:24px;font-weight:800;color:#111;margin-bottom:4px}
+.subtitle{font-size:13px;color:#999;margin-bottom:24px}
+.accent{color:#d14718}
+
+/* Tabs */
+.tabs{display:flex;gap:4px;margin-bottom:24px;border-bottom:2px solid #e5e5e5;padding-bottom:0}
+.tab{padding:10px 18px;font-size:13px;font-weight:600;color:#666;cursor:pointer;border:none;background:none;border-bottom:3px solid transparent;margin-bottom:-2px;transition:all .2s;font-family:inherit}
+.tab:hover{color:#d14718}
+.tab.active{color:#d14718;border-bottom-color:#d14718}
+.tab-content{display:none}
+.tab-content.active{display:block}
+
+/* KPI cards */
+.kpi-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:24px}
+.kpi{background:#fff;border:1.5px solid #e5e5e5;border-radius:12px;padding:18px 20px}
+.kpi-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:#999;margin-bottom:6px}
+.kpi-value{font-size:26px;font-weight:800;color:#111}
+.kpi-value.green{color:#16a34a}
+.kpi-value.red{color:#dc2626}
+.kpi-change{font-size:12px;color:#999;margin-top:4px}
+.kpi-change .up{color:#16a34a}
+.kpi-change .down{color:#dc2626}
+
+/* Year selector */
+.year-sel{display:flex;gap:6px;margin-bottom:20px}
+.year-btn{padding:8px 18px;font-size:13px;font-weight:600;border:1.5px solid #e5e5e5;border-radius:8px;background:#fff;color:#666;cursor:pointer;transition:all .2s;font-family:inherit}
+.year-btn:hover{border-color:#d14718;color:#d14718}
+.year-btn.active{background:#d14718;color:#fff;border-color:#d14718}
+
+/* Charts */
+.chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px}
+@media(max-width:768px){.chart-grid{grid-template-columns:1fr}}
+.chart-card{background:#fff;border:1.5px solid #e5e5e5;border-radius:12px;padding:20px}
+.chart-card h3{font-size:14px;font-weight:700;color:#111;margin-bottom:12px}
+.chart-card.full{grid-column:1/-1}
+canvas{max-height:300px}
+
+/* Tables */
+.table-card{background:#fff;border:1.5px solid #e5e5e5;border-radius:12px;padding:20px;margin-bottom:16px;overflow-x:auto}
+.table-card h3{font-size:14px;font-weight:700;color:#111;margin-bottom:12px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;padding:8px 12px;font-weight:700;color:#666;border-bottom:2px solid #e5e5e5;white-space:nowrap}
+th.num{text-align:right}
+td{padding:8px 12px;border-bottom:1px solid #f0f0f0}
+td.num{text-align:right;font-variant-numeric:tabular-nums;font-weight:500}
+tr.total td{font-weight:700;border-top:2px solid #e5e5e5;border-bottom:2px solid #e5e5e5;background:#fafafa}
+tr.subtotal td{font-weight:600;background:#fdf2ee}
+tr:hover{background:#fdf8f6}
+td.positive{color:#16a34a}
+td.negative{color:#dc2626}
+
+/* Ratios */
+.ratio-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-bottom:24px}
+.ratio-card{background:#fff;border:1.5px solid #e5e5e5;border-radius:12px;padding:16px 20px}
+.ratio-label{font-size:12px;color:#999;font-weight:600;margin-bottom:4px}
+.ratio-val{font-size:20px;font-weight:800;color:#111}
+.ratio-bar{height:6px;background:#e5e5e5;border-radius:3px;margin-top:8px;overflow:hidden}
+.ratio-bar-fill{height:100%;border-radius:3px;background:#d14718;transition:width .6s ease}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>KAKI — <span class="accent">Comptabilité</span></h1>
+  <p class="subtitle">Bilans & Comptes de résultat — Exercices 2023, 2024, 2025 (clôture au 31 mai)</p>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <button class="tab active" data-tab="overview">Vue d'ensemble</button>
+    <button class="tab" data-tab="pnl">Compte de résultat</button>
+    <button class="tab" data-tab="bilan">Bilan</button>
+    <button class="tab" data-tab="ratios">Ratios & Analyse</button>
+  </div>
+
+  <!-- ===== TAB: VUE D'ENSEMBLE ===== -->
+  <div class="tab-content active" id="tab-overview">
+    <div class="kpi-row">
+      <div class="kpi">
+        <div class="kpi-label">Chiffre d'affaires 2025</div>
+        <div class="kpi-value">933 051 €</div>
+        <div class="kpi-change"><span class="down">▼ -13,5%</span> vs 2024</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label">Résultat net 2025</div>
+        <div class="kpi-value green">171 380 €</div>
+        <div class="kpi-change"><span class="down">▼ -10,5%</span> vs 2024</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label">Marge nette 2025</div>
+        <div class="kpi-value">18,4%</div>
+        <div class="kpi-change"><span class="up">▲ +0,6pt</span> vs 2024</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label">Capitaux propres 2025</div>
+        <div class="kpi-value">434 912 €</div>
+        <div class="kpi-change"><span class="down">▼ -15,3%</span> vs 2024</div>
+      </div>
+    </div>
+
+    <div class="chart-grid">
+      <div class="chart-card">
+        <h3>Chiffre d'affaires & Résultat net</h3>
+        <canvas id="chartCaResult"></canvas>
+      </div>
+      <div class="chart-card">
+        <h3>Répartition des charges d'exploitation</h3>
+        <canvas id="chartCharges"></canvas>
+      </div>
+      <div class="chart-card">
+        <h3>Structure du bilan — Actif</h3>
+        <canvas id="chartActif"></canvas>
+      </div>
+      <div class="chart-card">
+        <h3>Structure du bilan — Passif</h3>
+        <canvas id="chartPassif"></canvas>
+      </div>
+    </div>
+
+    <!-- Mini summary table -->
+    <div class="table-card">
+      <h3>Synthèse 3 ans</h3>
+      <table>
+        <thead><tr><th></th><th class="num">2023</th><th class="num">2024</th><th class="num">2025</th><th class="num">Var. 24→25</th></tr></thead>
+        <tbody>
+          <tr><td>Chiffre d'affaires</td><td class="num">1 119 039</td><td class="num">1 079 177</td><td class="num">933 051</td><td class="num negative">-13,5%</td></tr>
+          <tr><td>Résultat d'exploitation</td><td class="num">250 159</td><td class="num">223 148</td><td class="num">202 279</td><td class="num negative">-9,3%</td></tr>
+          <tr><td>Résultat financier</td><td class="num">5 295</td><td class="num">12 243</td><td class="num">21 107</td><td class="num positive">+72,4%</td></tr>
+          <tr><td>Résultat exceptionnel</td><td class="num">12 034</td><td class="num">14 869</td><td class="num">0</td><td class="num">—</td></tr>
+          <tr><td>Impôt sur les bénéfices</td><td class="num">64 396</td><td class="num">58 790</td><td class="num">52 006</td><td class="num positive">-11,5%</td></tr>
+          <tr class="total"><td>Résultat net</td><td class="num">203 092</td><td class="num">191 470</td><td class="num">171 380</td><td class="num negative">-10,5%</td></tr>
+          <tr><td>Marge nette</td><td class="num">18,1%</td><td class="num">17,7%</td><td class="num">18,4%</td><td class="num positive">+0,6pt</td></tr>
+          <tr><td>&nbsp;</td><td></td><td></td><td></td><td></td></tr>
+          <tr><td>Total bilan</td><td class="num">1 201 829</td><td class="num">1 186 854</td><td class="num">990 416</td><td class="num negative">-16,5%</td></tr>
+          <tr><td>Capitaux propres</td><td class="num">322 061</td><td class="num">513 531</td><td class="num">434 912</td><td class="num negative">-15,3%</td></tr>
+          <tr><td>Trésorerie nette</td><td class="num">473 646</td><td class="num">341 917</td><td class="num">247 683</td><td class="num negative">-27,6%</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ===== TAB: COMPTE DE RÉSULTAT ===== -->
+  <div class="tab-content" id="tab-pnl">
+    <div class="table-card">
+      <h3>Compte de résultat comparatif</h3>
+      <table>
+        <thead><tr><th></th><th class="num">2023</th><th class="num">2024</th><th class="num">2025</th></tr></thead>
+        <tbody>
+          <tr class="subtotal"><td colspan="4">Produits d'exploitation</td></tr>
+          <tr><td>Chiffre d'affaires net</td><td class="num">1 119 039</td><td class="num">1 079 177</td><td class="num">933 051</td></tr>
+          <tr><td>Reprises sur amort./provisions</td><td class="num">20 513</td><td class="num">25 500</td><td class="num">11 698</td></tr>
+          <tr><td>Autres produits</td><td class="num">2 393</td><td class="num">569</td><td class="num">10 165</td></tr>
+          <tr class="total"><td>Total produits d'exploitation (I)</td><td class="num">1 141 945</td><td class="num">1 105 246</td><td class="num">954 914</td></tr>
+
+          <tr class="subtotal"><td colspan="4">Charges d'exploitation</td></tr>
+          <tr><td>Autres achats et charges externes</td><td class="num">470 392</td><td class="num">436 057</td><td class="num">316 014</td></tr>
+          <tr><td>Impôts, taxes et versements</td><td class="num">7 961</td><td class="num">10 356</td><td class="num">10 996</td></tr>
+          <tr><td>Salaires et traitements</td><td class="num">266 757</td><td class="num">280 036</td><td class="num">260 060</td></tr>
+          <tr><td>Charges sociales</td><td class="num">80 969</td><td class="num">85 675</td><td class="num">81 688</td></tr>
+          <tr><td>Dotations aux amortissements</td><td class="num">11 204</td><td class="num">11 084</td><td class="num">14 096</td></tr>
+          <tr><td>Dotations aux provisions (actif circ.)</td><td class="num">19 280</td><td class="num">25 500</td><td class="num">16 221</td></tr>
+          <tr><td>Autres charges</td><td class="num">35 222</td><td class="num">33 390</td><td class="num">53 560</td></tr>
+          <tr class="total"><td>Total charges d'exploitation (II)</td><td class="num">891 786</td><td class="num">882 098</td><td class="num">752 635</td></tr>
+
+          <tr class="total"><td>Résultat d'exploitation (I-II)</td><td class="num">250 159</td><td class="num">223 148</td><td class="num">202 279</td></tr>
+
+          <tr><td>&nbsp;</td><td></td><td></td><td></td></tr>
+          <tr><td>Produits financiers</td><td class="num">5 295</td><td class="num">12 812</td><td class="num">22 382</td></tr>
+          <tr><td>Charges financières</td><td class="num">0</td><td class="num">569</td><td class="num">1 275</td></tr>
+          <tr class="total"><td>Résultat financier</td><td class="num">5 295</td><td class="num">12 243</td><td class="num">21 107</td></tr>
+
+          <tr class="total"><td>Résultat courant avant impôts</td><td class="num">255 453</td><td class="num">235 391</td><td class="num">223 386</td></tr>
+
+          <tr><td>&nbsp;</td><td></td><td></td><td></td></tr>
+          <tr><td>Produits exceptionnels</td><td class="num">12 226</td><td class="num">30 990</td><td class="num">0</td></tr>
+          <tr><td>Charges exceptionnelles</td><td class="num">192</td><td class="num">16 121</td><td class="num">0</td></tr>
+          <tr class="total"><td>Résultat exceptionnel</td><td class="num">12 034</td><td class="num">14 869</td><td class="num">0</td></tr>
+
+          <tr><td>&nbsp;</td><td></td><td></td><td></td></tr>
+          <tr><td>Impôts sur les bénéfices</td><td class="num">64 396</td><td class="num">58 790</td><td class="num">52 006</td></tr>
+
+          <tr><td>&nbsp;</td><td></td><td></td><td></td></tr>
+          <tr><td>Total des produits</td><td class="num">1 159 465</td><td class="num">1 149 048</td><td class="num">977 296</td></tr>
+          <tr><td>Total des charges</td><td class="num">956 374</td><td class="num">957 578</td><td class="num">805 916</td></tr>
+          <tr class="total"><td><strong>RÉSULTAT NET</strong></td><td class="num"><strong>203 092</strong></td><td class="num"><strong>191 470</strong></td><td class="num"><strong>171 380</strong></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="chart-grid">
+      <div class="chart-card full">
+        <h3>Cascade : du CA au Résultat net (2025)</h3>
+        <canvas id="chartWaterfall"></canvas>
+      </div>
+    </div>
+
+    <div class="chart-grid">
+      <div class="chart-card">
+        <h3>Évolution des marges</h3>
+        <canvas id="chartMarges"></canvas>
+      </div>
+      <div class="chart-card">
+        <h3>Masse salariale vs CA</h3>
+        <canvas id="chartSalaires"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== TAB: BILAN ===== -->
+  <div class="tab-content" id="tab-bilan">
+    <div class="table-card">
+      <h3>Bilan — Actif</h3>
+      <table>
+        <thead><tr><th></th><th class="num">31/05/2023</th><th class="num">31/05/2024</th><th class="num">31/05/2025</th></tr></thead>
+        <tbody>
+          <tr class="subtotal"><td colspan="4">Actif immobilisé</td></tr>
+          <tr><td>Immobilisations incorporelles</td><td class="num">1 095</td><td class="num">1 405</td><td class="num">1 165</td></tr>
+          <tr><td>Immobilisations corporelles</td><td class="num">21 886</td><td class="num">22 984</td><td class="num">28 011</td></tr>
+          <tr><td>Immobilisations financières</td><td class="num">12 420</td><td class="num">12 245</td><td class="num">11 625</td></tr>
+          <tr class="total"><td>Total actif immobilisé (I)</td><td class="num">35 401</td><td class="num">36 634</td><td class="num">40 801</td></tr>
+
+          <tr class="subtotal"><td colspan="4">Actif circulant</td></tr>
+          <tr><td>Clients et comptes rattachés</td><td class="num">398 904</td><td class="num">380 073</td><td class="num">276 523</td></tr>
+          <tr><td>Autres créances</td><td class="num">260 480</td><td class="num">426 060</td><td class="num">410 043</td></tr>
+          <tr><td>Valeurs mobilières de placement</td><td class="num">—</td><td class="num">150 000</td><td class="num">120 000</td></tr>
+          <tr><td>Disponibilités</td><td class="num">473 646</td><td class="num">191 917</td><td class="num">127 683</td></tr>
+          <tr><td>Acomptes versés / Charges constatées d'avance</td><td class="num">33 398</td><td class="num">2 170</td><td class="num">15 366</td></tr>
+          <tr class="total"><td>Total actif circulant (II)</td><td class="num">1 166 428</td><td class="num">1 150 220</td><td class="num">949 615</td></tr>
+
+          <tr class="total"><td><strong>TOTAL ACTIF</strong></td><td class="num"><strong>1 201 829</strong></td><td class="num"><strong>1 186 854</strong></td><td class="num"><strong>990 416</strong></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="table-card">
+      <h3>Bilan — Passif</h3>
+      <table>
+        <thead><tr><th></th><th class="num">31/05/2023</th><th class="num">31/05/2024</th><th class="num">31/05/2025</th></tr></thead>
+        <tbody>
+          <tr class="subtotal"><td colspan="4">Capitaux propres</td></tr>
+          <tr><td>Capital social</td><td class="num">102 600</td><td class="num">102 600</td><td class="num">102 600</td></tr>
+          <tr><td>Réserve légale</td><td class="num">15 000</td><td class="num">15 000</td><td class="num">15 000</td></tr>
+          <tr><td>Report à nouveau</td><td class="num">1 370</td><td class="num">204 461</td><td class="num">145 931</td></tr>
+          <tr><td>Résultat de l'exercice</td><td class="num">203 092</td><td class="num">191 470</td><td class="num">171 380</td></tr>
+          <tr class="total"><td>Total capitaux propres (I)</td><td class="num">322 061</td><td class="num">513 531</td><td class="num">434 912</td></tr>
+
+          <tr class="subtotal"><td colspan="4">Dettes</td></tr>
+          <tr><td>Emprunts et dettes bancaires</td><td class="num">—</td><td class="num">24 192</td><td class="num">34 366</td></tr>
+          <tr><td>Avances & acomptes clients</td><td class="num">8 926</td><td class="num">8 674</td><td class="num">8 376</td></tr>
+          <tr><td>Dettes fournisseurs</td><td class="num">148 639</td><td class="num">43 591</td><td class="num">14 413</td></tr>
+          <tr><td>Dettes fiscales et sociales</td><td class="num">192 357</td><td class="num">143 991</td><td class="num">130 631</td></tr>
+          <tr><td>Autres dettes</td><td class="num">—</td><td class="num">6 488</td><td class="num">1 995</td></tr>
+          <tr><td>Produits constatés d'avance</td><td class="num">529 845</td><td class="num">446 387</td><td class="num">365 722</td></tr>
+          <tr class="total"><td>Total dettes (IV)</td><td class="num">879 768</td><td class="num">673 323</td><td class="num">555 504</td></tr>
+
+          <tr class="total"><td><strong>TOTAL PASSIF</strong></td><td class="num"><strong>1 201 829</strong></td><td class="num"><strong>1 186 854</strong></td><td class="num"><strong>990 416</strong></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="chart-grid">
+      <div class="chart-card">
+        <h3>Évolution de la trésorerie</h3>
+        <canvas id="chartTreso"></canvas>
+      </div>
+      <div class="chart-card">
+        <h3>Produits constatés d'avance vs CA</h3>
+        <canvas id="chartPCA"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== TAB: RATIOS ===== -->
+  <div class="tab-content" id="tab-ratios">
+    <div class="ratio-grid" id="ratioGrid"></div>
+
+    <div class="chart-grid">
+      <div class="chart-card full">
+        <h3>Évolution des ratios clés</h3>
+        <canvas id="chartRatios"></canvas>
+      </div>
+    </div>
+
+    <div class="table-card">
+      <h3>Tableau des ratios</h3>
+      <table>
+        <thead><tr><th></th><th class="num">2023</th><th class="num">2024</th><th class="num">2025</th></tr></thead>
+        <tbody>
+          <tr><td>Marge d'exploitation</td><td class="num">22,4%</td><td class="num">20,7%</td><td class="num">21,7%</td></tr>
+          <tr><td>Marge nette</td><td class="num">18,1%</td><td class="num">17,7%</td><td class="num">18,4%</td></tr>
+          <tr><td>Ratio masse salariale / CA</td><td class="num">31,1%</td><td class="num">33,9%</td><td class="num">36,6%</td></tr>
+          <tr><td>Charges externes / CA</td><td class="num">42,0%</td><td class="num">40,4%</td><td class="num">33,9%</td></tr>
+          <tr><td>Taux d'IS effectif</td><td class="num">23,8%</td><td class="num">23,5%</td><td class="num">23,3%</td></tr>
+          <tr><td>&nbsp;</td><td></td><td></td><td></td></tr>
+          <tr><td>Ratio de solvabilité (CP/Total bilan)</td><td class="num">26,8%</td><td class="num">43,3%</td><td class="num">43,9%</td></tr>
+          <tr><td>Ratio de liquidité générale (AC/DCT)</td><td class="num">1,33</td><td class="num">1,71</td><td class="num">1,71</td></tr>
+          <tr><td>Trésorerie nette (Dispo + VMP)</td><td class="num">473 646</td><td class="num">341 917</td><td class="num">247 683</td></tr>
+          <tr><td>BFR estimé (AC hors tréso - Dettes CT hors banque)</td><td class="num">13 014</td><td class="num">168 304</td><td class="num">171 649</td></tr>
+          <tr><td>&nbsp;</td><td></td><td></td><td></td></tr>
+          <tr><td>Produits constatés d'avance / CA</td><td class="num">47,3%</td><td class="num">41,4%</td><td class="num">39,2%</td></tr>
+          <tr><td>Délai clients (jours de CA)</td><td class="num">130j</td><td class="num">129j</td><td class="num">108j</td></tr>
+          <tr><td>Délai fournisseurs (jours d'achats)</td><td class="num">115j</td><td class="num">36j</td><td class="num">17j</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="table-card">
+      <h3>Points d'attention</h3>
+      <table>
+        <tbody>
+          <tr><td style="color:#d14718;font-weight:700">▼ Baisse du CA</td><td>Le CA recule de 1,1M€ (2023) à 933k€ (2025), soit -16,6% sur 2 ans. Tendance à surveiller.</td></tr>
+          <tr><td style="color:#16a34a;font-weight:700">✓ Marge nette stable</td><td>Malgré la baisse de CA, la marge nette se maintient autour de 18% grâce à la maîtrise des charges externes (-33% en 2 ans).</td></tr>
+          <tr><td style="color:#d14718;font-weight:700">▼ Trésorerie en baisse</td><td>Disponibilités passées de 474k€ à 128k€. Distribution de dividendes (250k€ distribués entre 2023 et 2025 via le report à nouveau) et VMP (120k€).</td></tr>
+          <tr><td style="color:#16a34a;font-weight:700">✓ PCA importants</td><td>Les produits constatés d'avance (366k€ en 2025) représentent ~39% du CA : revenus récurrents déjà encaissés = bonne visibilité.</td></tr>
+          <tr><td style="color:#d14718;font-weight:700">▲ Masse salariale / CA</td><td>Le ratio salaires+charges / CA progresse de 31% à 37%. La productivité par salarié diminue (CA en baisse, effectif stable).</td></tr>
+          <tr><td style="color:#16a34a;font-weight:700">✓ Résultat financier</td><td>En forte hausse (5k→21k€) grâce aux placements (VMP + compte à terme). Bonne gestion de trésorerie.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script>
+// Tab navigation
+document.querySelectorAll('.tab').forEach(t => {
+  t.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(x => x.classList.remove('active'));
+    t.classList.add('active');
+    document.getElementById('tab-' + t.dataset.tab).classList.add('active');
+  });
+});
+
+const orange = '#d14718';
+const orangeLight = 'rgba(209,71,24,0.15)';
+const green = '#16a34a';
+const greenLight = 'rgba(22,163,74,0.15)';
+const blue = '#2563eb';
+const blueLight = 'rgba(37,99,235,0.15)';
+const gray = '#94a3b8';
+const grayLight = 'rgba(148,163,184,0.15)';
+const years = ['2023','2024','2025'];
+
+const fmt = v => v.toLocaleString('fr-FR');
+
+// Chart defaults
+Chart.defaults.font.family = "'Inter', system-ui, sans-serif";
+Chart.defaults.font.size = 12;
+Chart.defaults.color = '#666';
+
+// 1) CA & Résultat net
+new Chart(document.getElementById('chartCaResult'), {
+  type: 'bar',
+  data: {
+    labels: years,
+    datasets: [
+      { label: 'CA', data: [1119039, 1079177, 933051], backgroundColor: orange, borderRadius: 6 },
+      { label: 'Résultat net', data: [203092, 191470, 171380], backgroundColor: green, borderRadius: 6 }
+    ]
+  },
+  options: { responsive: true, plugins: { legend: { position: 'bottom' } }, scales: { y: { beginAtZero: true, ticks: { callback: v => fmt(v) + ' €' } } } }
+});
+
+// 2) Charges
+new Chart(document.getElementById('chartCharges'), {
+  type: 'doughnut',
+  data: {
+    labels: ['Charges ext.', 'Salaires', 'Charges soc.', 'Amort.', 'Provisions', 'Autres'],
+    datasets: [{
+      data: [316014, 260060, 81688, 14096, 16221, 64556],
+      backgroundColor: [orange, green, blue, '#f59e0b', '#8b5cf6', gray]
+    }]
+  },
+  options: { responsive: true, plugins: { legend: { position: 'bottom', labels: { boxWidth: 12 } } } }
+});
+
+// 3) Actif structure
+new Chart(document.getElementById('chartActif'), {
+  type: 'bar',
+  data: {
+    labels: years,
+    datasets: [
+      { label: 'Immobilisé', data: [35401, 36634, 40801], backgroundColor: orange, borderRadius: 4 },
+      { label: 'Clients', data: [398904, 380073, 276523], backgroundColor: green, borderRadius: 4 },
+      { label: 'Créances & autres', data: [293878, 428230, 425409], backgroundColor: blue, borderRadius: 4 },
+      { label: 'Trésorerie + VMP', data: [473646, 341917, 247683], backgroundColor: '#f59e0b', borderRadius: 4 }
+    ]
+  },
+  options: { responsive: true, plugins: { legend: { position: 'bottom', labels: { boxWidth: 12 } } }, scales: { x: { stacked: true }, y: { stacked: true, ticks: { callback: v => fmt(v) } } } }
+});
+
+// 4) Passif structure
+new Chart(document.getElementById('chartPassif'), {
+  type: 'bar',
+  data: {
+    labels: years,
+    datasets: [
+      { label: 'Capitaux propres', data: [322061, 513531, 434912], backgroundColor: green, borderRadius: 4 },
+      { label: 'Dettes fournisseurs', data: [148639, 43591, 14413], backgroundColor: orange, borderRadius: 4 },
+      { label: 'Dettes fiscales/sociales', data: [192357, 143991, 130631], backgroundColor: blue, borderRadius: 4 },
+      { label: 'PCA', data: [529845, 446387, 365722], backgroundColor: '#f59e0b', borderRadius: 4 },
+      { label: 'Autres dettes', data: [8927, 39354, 44738], backgroundColor: gray, borderRadius: 4 }
+    ]
+  },
+  options: { responsive: true, plugins: { legend: { position: 'bottom', labels: { boxWidth: 12 } } }, scales: { x: { stacked: true }, y: { stacked: true, ticks: { callback: v => fmt(v) } } } }
+});
+
+// 5) Waterfall CA → Résultat net 2025
+new Chart(document.getElementById('chartWaterfall'), {
+  type: 'bar',
+  data: {
+    labels: ['CA', 'Charges ext.', 'Salaires', 'Ch. sociales', 'Autres ch.', 'Rés. exploit.', 'Financier', 'IS', 'Rés. net'],
+    datasets: [{
+      label: '2025',
+      data: [933051, -316014, -260060, -81688, -93117, 202279, 21107, -52006, 171380],
+      backgroundColor: ctx => {
+        const v = ctx.raw;
+        if (ctx.dataIndex === 0) return orange;
+        if (ctx.dataIndex === 5 || ctx.dataIndex === 8) return green;
+        if (v < 0) return '#dc2626';
+        return green;
+      },
+      borderRadius: 4
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: { legend: { display: false } },
+    scales: { y: { ticks: { callback: v => fmt(v) + ' €' } } }
+  }
+});
+
+// 6) Marges
+new Chart(document.getElementById('chartMarges'), {
+  type: 'line',
+  data: {
+    labels: years,
+    datasets: [
+      { label: "Marge d'exploitation", data: [22.4, 20.7, 21.7], borderColor: orange, backgroundColor: orangeLight, fill: true, tension: 0.3 },
+      { label: 'Marge nette', data: [18.1, 17.7, 18.4], borderColor: green, backgroundColor: greenLight, fill: true, tension: 0.3 }
+    ]
+  },
+  options: { responsive: true, plugins: { legend: { position: 'bottom' } }, scales: { y: { min: 10, max: 30, ticks: { callback: v => v + '%' } } } }
+});
+
+// 7) Salaires vs CA
+new Chart(document.getElementById('chartSalaires'), {
+  type: 'bar',
+  data: {
+    labels: years,
+    datasets: [
+      { label: 'Salaires + ch. soc.', data: [347726, 365711, 341748], backgroundColor: orange, borderRadius: 6 },
+      { label: 'CA', data: [1119039, 1079177, 933051], backgroundColor: blueLight, borderColor: blue, borderWidth: 1.5, borderRadius: 6 }
+    ]
+  },
+  options: { responsive: true, plugins: { legend: { position: 'bottom' } }, scales: { y: { ticks: { callback: v => fmt(v) } } } }
+});
+
+// 8) Trésorerie
+new Chart(document.getElementById('chartTreso'), {
+  type: 'line',
+  data: {
+    labels: years,
+    datasets: [
+      { label: 'Disponibilités', data: [473646, 191917, 127683], borderColor: blue, backgroundColor: blueLight, fill: true, tension: 0.3 },
+      { label: 'VMP', data: [0, 150000, 120000], borderColor: '#f59e0b', backgroundColor: 'rgba(245,158,11,0.15)', fill: true, tension: 0.3 },
+      { label: 'Tréso totale', data: [473646, 341917, 247683], borderColor: green, borderDash: [5,3], tension: 0.3, pointRadius: 5 }
+    ]
+  },
+  options: { responsive: true, plugins: { legend: { position: 'bottom' } }, scales: { y: { ticks: { callback: v => fmt(v) + ' €' } } } }
+});
+
+// 9) PCA vs CA
+new Chart(document.getElementById('chartPCA'), {
+  type: 'bar',
+  data: {
+    labels: years,
+    datasets: [
+      { label: 'Produits constatés d\'avance', data: [529845, 446387, 365722], backgroundColor: orange, borderRadius: 6 },
+      { label: 'CA', data: [1119039, 1079177, 933051], backgroundColor: blueLight, borderColor: blue, borderWidth: 1.5, borderRadius: 6 }
+    ]
+  },
+  options: { responsive: true, plugins: { legend: { position: 'bottom' } }, scales: { y: { ticks: { callback: v => fmt(v) } } } }
+});
+
+// 10) Ratios chart
+new Chart(document.getElementById('chartRatios'), {
+  type: 'line',
+  data: {
+    labels: years,
+    datasets: [
+      { label: "Marge d'exploitation", data: [22.4, 20.7, 21.7], borderColor: orange, tension: 0.3, yAxisID: 'y' },
+      { label: 'Marge nette', data: [18.1, 17.7, 18.4], borderColor: green, tension: 0.3, yAxisID: 'y' },
+      { label: 'Solvabilité (CP/Bilan)', data: [26.8, 43.3, 43.9], borderColor: blue, tension: 0.3, yAxisID: 'y' },
+      { label: 'Masse salariale/CA', data: [31.1, 33.9, 36.6], borderColor: '#f59e0b', tension: 0.3, yAxisID: 'y' }
+    ]
+  },
+  options: {
+    responsive: true,
+    plugins: { legend: { position: 'bottom' } },
+    scales: { y: { min: 0, max: 55, ticks: { callback: v => v + '%' } } }
+  }
+});
+
+// Ratio cards
+const ratios = [
+  { label: "Marge d'exploitation", val: '21,7%', pct: 21.7 },
+  { label: 'Marge nette', val: '18,4%', pct: 18.4 },
+  { label: 'Solvabilité', val: '43,9%', pct: 43.9 },
+  { label: 'Liquidité générale', val: '1,71x', pct: 85 },
+  { label: 'Masse salariale / CA', val: '36,6%', pct: 36.6 },
+  { label: 'PCA / CA', val: '39,2%', pct: 39.2 },
+];
+const rg = document.getElementById('ratioGrid');
+ratios.forEach(r => {
+  rg.innerHTML += `<div class="ratio-card"><div class="ratio-label">${r.label}</div><div class="ratio-val">${r.val}</div><div class="ratio-bar"><div class="ratio-bar-fill" style="width:${r.pct}%"></div></div></div>`;
+});
+</script>
+</body>
+</html>
