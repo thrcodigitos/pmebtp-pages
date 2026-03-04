@@ -48,7 +48,54 @@ input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 20p
 .matrix-table td { padding: 8px 10px; text-align: right; border-bottom: 1px solid #f0f0f0; }
 .matrix-table .total-row { background: #f0efed; font-weight: 700; }
 .matrix-table .total-col { font-weight: 700; background: rgba(209,71,24,0.04); }
-</style>
+
+    /* Side Panel */
+    .side-panel-overlay {
+      position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.3); z-index: 1000;
+      animation: fadeIn 0.2s ease;
+    }
+    .side-panel {
+      position: fixed; top: 0; right: 0; bottom: 0; width: 480px; max-width: 90vw;
+      background: #fff; z-index: 1001; overflow-y: auto;
+      box-shadow: -8px 0 40px rgba(0,0,0,0.15);
+      animation: slideIn 0.25s ease;
+      padding: 0;
+    }
+    @keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    .side-panel-header {
+      position: sticky; top: 0; background: #fff;
+      border-bottom: 2px solid #d14718;
+      padding: 20px 24px; z-index: 1;
+    }
+    .side-panel-close {
+      position: absolute; top: 16px; right: 16px;
+      background: #f5f5f5; border: none; border-radius: 50%;
+      width: 32px; height: 32px; font-size: 18px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.2s;
+    }
+    .side-panel-close:hover { background: #e0e0e0; }
+    .side-panel-body { padding: 24px; }
+    .sp-section { margin-bottom: 20px; }
+    .sp-section-title {
+      font-size: 10px; font-weight: 700; letter-spacing: 1px;
+      text-transform: uppercase; color: #d14718; margin-bottom: 8px;
+    }
+    .sp-row {
+      display: flex; justify-content: space-between; padding: 6px 0;
+      border-bottom: 1px solid #f5f5f5; font-size: 13px;
+    }
+    .sp-row-label { color: #888; }
+    .sp-row-value { font-weight: 600; color: #111; }
+    .sp-bar-container { margin-top: 4px; }
+    .sp-bar-row { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+    .sp-bar-label { font-size: 11px; color: "#666"; min-width: 80px; }
+    .sp-bar { height: 20px; border-radius: 4px; min-width: 2px; transition: width 0.3s; }
+    .sp-bar-value { font-size: 12px; font-weight: 600; }
+
+  </style>
 </head>
 <body>
 <div id="root"></div>
@@ -308,6 +355,100 @@ function PrimesTab() {
 
   return (
     <div>
+      {selectedClient && (
+        <>
+          <div className="side-panel-overlay" onClick={() => setSelectedClient(null)} />
+          <div className="side-panel">
+            <div className="side-panel-header">
+              <button className="side-panel-close" onClick={() => setSelectedClient(null)}>×</button>
+              <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", color: "#d14718", marginBottom: 4 }}>
+                {selectedClient.nb_ex >= 3 ? "Client Fidèle" : selectedClient.nb_ex === 2 ? "Client Récurrent" : "Client Ponctuel"}
+              </div>
+              <div style={{ fontFamily: "'DM Serif Display', serif", fontSize: 22, fontWeight: 700, color: "#111", lineHeight: 1.2 }}>
+                {selectedClient.name}
+              </div>
+              <div style={{ fontSize: 12, color: "#888", marginTop: 4 }}>Compte {selectedClient.id}</div>
+            </div>
+            <div className="side-panel-body">
+              <div className="sp-section">
+                <div className="sp-section-title">Chiffre d'affaires</div>
+                <div className="sp-row"><span className="sp-row-label">CA HT Total</span><span className="sp-row-value" style={{ color: "#d14718", fontSize: 18, fontFamily: "'DM Serif Display', serif" }}>{fmt(selectedClient.ca_ht)}</span></div>
+                <div className="sp-row"><span className="sp-row-label">CA TTC Total</span><span className="sp-row-value">{fmt(selectedClient.ca_ttc)}</span></div>
+                <div className="sp-row"><span className="sp-row-label">Panier moyen HT</span><span className="sp-row-value">{fmt(selectedClient.ca_ht / selectedClient.nb_factures)}</span></div>
+              </div>
+
+              <div className="sp-section">
+                <div className="sp-section-title">Historique par exercice</div>
+                <div className="sp-bar-container">
+                  {data.exercices.map(ex => {
+                    const val = selectedClient[ex] || 0;
+                    const maxEx = Math.max(...data.exercices.map(e => selectedClient[e] || 0), 1);
+                    const pct = (val / maxEx) * 100;
+                    return (
+                      <div key={ex} className="sp-bar-row">
+                        <div style={{ fontSize: 11, color: "#666", minWidth: 72, fontWeight: 600 }}>{ex}</div>
+                        <div style={{ flex: 1, background: "#f0f0f0", borderRadius: 4, height: 22, position: "relative" }}>
+                          <div className="sp-bar" style={{ width: pct + "%", background: val > 0 ? "#d14718" : "transparent", height: 22, display: "flex", alignItems: "center", justifyContent: "flex-end", paddingRight: 8 }}>
+                            {val > 0 && <span style={{ fontSize: 11, fontWeight: 700, color: pct > 40 ? "#fff" : "#d14718", position: pct > 40 ? "relative" : "absolute", right: pct > 40 ? 0 : -60 }}>{fmt(val)}</span>}
+                          </div>
+                        </div>
+                        {val === 0 && <span style={{ fontSize: 11, color: "#ccc", marginLeft: 4 }}>—</span>}
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+
+              <div className="sp-section">
+                <div className="sp-section-title">Détails</div>
+                <div className="sp-row"><span className="sp-row-label">Nombre de factures</span><span className="sp-row-value">{selectedClient.nb_factures}</span></div>
+                <div className="sp-row"><span className="sp-row-label">Exercices actifs</span><span className="sp-row-value">{selectedClient.nb_ex} / {data.exercices.length}</span></div>
+                <div className="sp-row"><span className="sp-row-label">Produit principal</span><span className="sp-row-value">{selectedClient.produit}</span></div>
+                <div className="sp-row"><span className="sp-row-label">Première facture</span><span className="sp-row-value">{selectedClient.first}</span></div>
+                <div className="sp-row"><span className="sp-row-label">Dernière facture</span><span className="sp-row-value">{selectedClient.last}</span></div>
+              </div>
+
+              <div className="sp-section">
+                <div className="sp-section-title">Évolution</div>
+                {(() => {
+                  const exVals = data.exercices.map(ex => ({ ex, val: selectedClient[ex] || 0 }));
+                  const active = exVals.filter(e => e.val > 0);
+                  if (active.length < 2) return <div style={{ fontSize: 12, color: "#888" }}>Pas assez de données pour calculer la tendance</div>;
+                  const last = active[active.length - 1];
+                  const prev = active[active.length - 2];
+                  const growth = (last.val - prev.val) / prev.val;
+                  return (
+                    <div style={{ display: "flex", alignItems: "center", gap: 12, padding: 12, background: growth >= 0 ? "#f0fdf4" : "#fef2f2", borderRadius: 8 }}>
+                      <div style={{ fontSize: 28 }}>{growth >= 0 ? "📈" : "📉"}</div>
+                      <div>
+                        <div style={{ fontWeight: 700, color: growth >= 0 ? "#16a34a" : "#dc2626", fontSize: 16 }}>
+                          {growth >= 0 ? "+" : ""}{(growth * 100).toFixed(0)}%
+                        </div>
+                        <div style={{ fontSize: 11, color: "#666" }}>
+                          {prev.ex} → {last.ex}
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })()}
+              </div>
+
+              {(() => {
+                const lastDate = new Date(selectedClient.last);
+                const now = new Date();
+                const months = (now.getFullYear() - lastDate.getFullYear()) * 12 + now.getMonth() - lastDate.getMonth();
+                if (months > 12) return (
+                  <div style={{ padding: 12, background: "#fff7ed", border: "1px solid #fed7aa", borderRadius: 8, marginTop: 8 }}>
+                    <div style={{ fontSize: 13, fontWeight: 600, color: "#c2410c" }}>⚠️ Client inactif depuis {months} mois</div>
+                    <div style={{ fontSize: 11, color: "#888", marginTop: 2 }}>Dernière facture : {selectedClient.last}</div>
+                  </div>
+                );
+                return null;
+              })()}
+            </div>
+          </div>
+        </>
+      )}
       <div style={{ display: "flex", gap: 6, background: "#f0efed", borderRadius: 8, padding: 3, marginBottom: 20, width: "fit-content" }}>
         {[{ key: "mensuel", label: "Calcul mensuel" }, { key: "simulateur", label: "Simulateur annuel" }].map(t => (
           <button key={t.key} onClick={() => setSubTab(t.key)} className={`tab-btn ${subTab === t.key ? "active" : ""}`}>{t.label}</button>
@@ -435,6 +576,7 @@ function ClientsTab() {
   const [sortAsc, setSortAsc] = useState(false);
   const [filterEx, setFilterEx] = useState("all");
   const [page, setPage] = useState(0);
+  const [selectedClient, setSelectedClient] = useState(null);
   const perPage = 50;
 
   const toggleSort = (key) => {
@@ -485,6 +627,100 @@ function ClientsTab() {
 
   return (
     <div>
+      {selectedClient && (
+        <>
+          <div className="side-panel-overlay" onClick={() => setSelectedClient(null)} />
+          <div className="side-panel">
+            <div className="side-panel-header">
+              <button className="side-panel-close" onClick={() => setSelectedClient(null)}>×</button>
+              <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", color: "#d14718", marginBottom: 4 }}>
+                {selectedClient.nb_ex >= 3 ? "Client Fidèle" : selectedClient.nb_ex === 2 ? "Client Récurrent" : "Client Ponctuel"}
+              </div>
+              <div style={{ fontFamily: "'DM Serif Display', serif", fontSize: 22, fontWeight: 700, color: "#111", lineHeight: 1.2 }}>
+                {selectedClient.name}
+              </div>
+              <div style={{ fontSize: 12, color: "#888", marginTop: 4 }}>Compte {selectedClient.id}</div>
+            </div>
+            <div className="side-panel-body">
+              <div className="sp-section">
+                <div className="sp-section-title">Chiffre d'affaires</div>
+                <div className="sp-row"><span className="sp-row-label">CA HT Total</span><span className="sp-row-value" style={{ color: "#d14718", fontSize: 18, fontFamily: "'DM Serif Display', serif" }}>{fmt(selectedClient.ca_ht)}</span></div>
+                <div className="sp-row"><span className="sp-row-label">CA TTC Total</span><span className="sp-row-value">{fmt(selectedClient.ca_ttc)}</span></div>
+                <div className="sp-row"><span className="sp-row-label">Panier moyen HT</span><span className="sp-row-value">{fmt(selectedClient.ca_ht / selectedClient.nb_factures)}</span></div>
+              </div>
+
+              <div className="sp-section">
+                <div className="sp-section-title">Historique par exercice</div>
+                <div className="sp-bar-container">
+                  {data.exercices.map(ex => {
+                    const val = selectedClient[ex] || 0;
+                    const maxEx = Math.max(...data.exercices.map(e => selectedClient[e] || 0), 1);
+                    const pct = (val / maxEx) * 100;
+                    return (
+                      <div key={ex} className="sp-bar-row">
+                        <div style={{ fontSize: 11, color: "#666", minWidth: 72, fontWeight: 600 }}>{ex}</div>
+                        <div style={{ flex: 1, background: "#f0f0f0", borderRadius: 4, height: 22, position: "relative" }}>
+                          <div className="sp-bar" style={{ width: pct + "%", background: val > 0 ? "#d14718" : "transparent", height: 22, display: "flex", alignItems: "center", justifyContent: "flex-end", paddingRight: 8 }}>
+                            {val > 0 && <span style={{ fontSize: 11, fontWeight: 700, color: pct > 40 ? "#fff" : "#d14718", position: pct > 40 ? "relative" : "absolute", right: pct > 40 ? 0 : -60 }}>{fmt(val)}</span>}
+                          </div>
+                        </div>
+                        {val === 0 && <span style={{ fontSize: 11, color: "#ccc", marginLeft: 4 }}>—</span>}
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+
+              <div className="sp-section">
+                <div className="sp-section-title">Détails</div>
+                <div className="sp-row"><span className="sp-row-label">Nombre de factures</span><span className="sp-row-value">{selectedClient.nb_factures}</span></div>
+                <div className="sp-row"><span className="sp-row-label">Exercices actifs</span><span className="sp-row-value">{selectedClient.nb_ex} / {data.exercices.length}</span></div>
+                <div className="sp-row"><span className="sp-row-label">Produit principal</span><span className="sp-row-value">{selectedClient.produit}</span></div>
+                <div className="sp-row"><span className="sp-row-label">Première facture</span><span className="sp-row-value">{selectedClient.first}</span></div>
+                <div className="sp-row"><span className="sp-row-label">Dernière facture</span><span className="sp-row-value">{selectedClient.last}</span></div>
+              </div>
+
+              <div className="sp-section">
+                <div className="sp-section-title">Évolution</div>
+                {(() => {
+                  const exVals = data.exercices.map(ex => ({ ex, val: selectedClient[ex] || 0 }));
+                  const active = exVals.filter(e => e.val > 0);
+                  if (active.length < 2) return <div style={{ fontSize: 12, color: "#888" }}>Pas assez de données pour calculer la tendance</div>;
+                  const last = active[active.length - 1];
+                  const prev = active[active.length - 2];
+                  const growth = (last.val - prev.val) / prev.val;
+                  return (
+                    <div style={{ display: "flex", alignItems: "center", gap: 12, padding: 12, background: growth >= 0 ? "#f0fdf4" : "#fef2f2", borderRadius: 8 }}>
+                      <div style={{ fontSize: 28 }}>{growth >= 0 ? "📈" : "📉"}</div>
+                      <div>
+                        <div style={{ fontWeight: 700, color: growth >= 0 ? "#16a34a" : "#dc2626", fontSize: 16 }}>
+                          {growth >= 0 ? "+" : ""}{(growth * 100).toFixed(0)}%
+                        </div>
+                        <div style={{ fontSize: 11, color: "#666" }}>
+                          {prev.ex} → {last.ex}
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })()}
+              </div>
+
+              {(() => {
+                const lastDate = new Date(selectedClient.last);
+                const now = new Date();
+                const months = (now.getFullYear() - lastDate.getFullYear()) * 12 + now.getMonth() - lastDate.getMonth();
+                if (months > 12) return (
+                  <div style={{ padding: 12, background: "#fff7ed", border: "1px solid #fed7aa", borderRadius: 8, marginTop: 8 }}>
+                    <div style={{ fontSize: 13, fontWeight: 600, color: "#c2410c" }}>⚠️ Client inactif depuis {months} mois</div>
+                    <div style={{ fontSize: 11, color: "#888", marginTop: 2 }}>Dernière facture : {selectedClient.last}</div>
+                  </div>
+                );
+                return null;
+              })()}
+            </div>
+          </div>
+        </>
+      )}
       <div style={{ display: "flex", gap: 6, background: "#f0efed", borderRadius: 8, padding: 3, marginBottom: 20, width: "fit-content" }}>
         {[{ key: "overview", label: "Vue d'ensemble" }, { key: "clients", label: "Fiches Clients" }, { key: "matrix", label: "Matrice Mensuelle" }].map(t => (
           <button key={t.key} onClick={() => { setView(t.key); setPage(0); }} className={`tab-btn ${view === t.key ? "active" : ""}`}>{t.label}</button>
@@ -584,8 +820,8 @@ function ClientsTab() {
                 </tr></thead>
                 <tbody>
                   {pageClients.map(c => (
-                    <tr key={c.id}>
-                      <td style={{ fontWeight: 600 }}>{c.name}</td>
+                    <tr key={c.id} onClick={() => setSelectedClient(c)} style={{ cursor: "pointer", transition: "background 0.15s" }} onMouseOver={e => e.currentTarget.style.background="#fdf8f6"} onMouseOut={e => e.currentTarget.style.background=""}>
+                      <td style={{ fontWeight: 600, color: "#d14718" }}>{c.name}</td>
                       <td><span className={`badge ${c.nb_ex >= 3 ? "badge-fidele" : c.nb_ex === 2 ? "badge-recurrent" : "badge-ponctuel"}`}>{c.nb_ex >= 3 ? "Fidèle" : c.nb_ex === 2 ? "Récurrent" : "Ponctuel"}</span></td>
                       <td className="right" style={{ fontWeight: 700 }}>{fmt(c.ca_ht)}</td>
                       {data.exercices.map(ex => <td key={ex} className="right" style={{ color: c[ex] > 0 ? "#1a1a1a" : "#ddd" }}>{c[ex] > 0 ? fmt(c[ex]) : "—"}</td>)}
