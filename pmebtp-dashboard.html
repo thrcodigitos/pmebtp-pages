@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>PMEBTP — Dashboard</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.development.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.development.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.9/babel.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
@@ -1082,6 +1082,23 @@ const REVENUE_BREAKDOWN = {
 };
 
 
+
+// Error Boundary
+class ErrorBoundary extends React.Component {
+  constructor(props) { super(props); this.state = { hasError: false, error: null }; }
+  static getDerivedStateFromError(error) { return { hasError: true, error }; }
+  componentDidCatch(error, info) { console.error("React error:", error, info); }
+  render() {
+    if (this.state.hasError) {
+      return React.createElement("div", { style: { padding: 40, textAlign: "center" } },
+        React.createElement("h2", { style: { color: "#d14718" } }, "Erreur de rendu"),
+        React.createElement("pre", { style: { fontSize: 12, color: "#666", whiteSpace: "pre-wrap" } }, String(this.state.error))
+      );
+    }
+    return this.props.children;
+  }
+}
+
 // ============================================================
 // MAIN APP
 // ============================================================
@@ -1114,7 +1131,7 @@ function App() {
         {mainTab === "compta" && <ComptaTab />}
         {mainTab === "finances" && (
           <div style={{ margin: "-20px -24px -40px", overflow: "hidden" }}>
-            <iframe src="/kaki-dashboard.html?embed=1" style={{ width: "100%", height: "calc(100vh - 120px)", border: "none" }} />
+            <iframe src="/kaki-dashboard.html?embed=1" style={{ width: "100%", height: "calc(100vh - 120px)", border: "none" }}></iframe>
           </div>
         )}
       </div>
@@ -1126,7 +1143,7 @@ function App() {
   );
 }
 
-ReactDOM.render(<App />, document.getElementById("root"));
+ReactDOM.render(<ErrorBoundary><App /></ErrorBoundary>, document.getElementById("root"));
 </script>
 </body>
 </html>
