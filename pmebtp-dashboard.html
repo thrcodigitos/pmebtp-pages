@@ -7,10 +7,10 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.9/babel.min.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
-body { background: #faf9f7; font-family: 'DM Sans', 'Segoe UI', system-ui, sans-serif; color: #1a1a1a; }
+body { background: #faf9f7; font-family: 'Inter', system-ui, -apple-system, sans-serif; color: #1a1a1a; }
 select:focus, input:focus { outline: none; border-color: #d14718 !important; }
 ::placeholder { color: #bbb; }
 input[type="range"] { -webkit-appearance: none; height: 6px; border-radius: 3px; background: #e5e5e5; }
@@ -161,7 +161,7 @@ function TresorerieTab() {
   
   const cardStyle = { background: "#fff", borderRadius: 12, border: "1.5px solid #e5e5e5", padding: 20, marginBottom: 16 };
   const kpiStyle = { textAlign: "center", flex: 1, padding: 12 };
-  const kpiVal = { fontSize: 28, fontWeight: 800, color: "#111", fontFamily: "'DM Serif Display', serif" };
+  const kpiVal = { fontSize: 28, fontWeight: 800, color: "#111", fontFamily: "'Inter', sans-serif" };
   const kpiLabel = { fontSize: 11, color: "#888", marginTop: 4, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.5px" };
 
   return React.createElement("div", null,
@@ -187,7 +187,7 @@ function TresorerieTab() {
     
     // Monthly chart
     React.createElement("div", { style: cardStyle },
-      React.createElement("h3", { style: { fontFamily: "'DM Serif Display', serif", fontSize: 18, marginBottom: 16 } }, "Encaissements vs Charges par mois"),
+      React.createElement("h3", { style: { fontFamily: "'Inter', sans-serif", fontSize: 18, marginBottom: 16 } }, "Encaissements vs Charges par mois"),
       React.createElement("div", { style: { display: "flex", gap: 8, alignItems: "flex-end", height: 240, padding: "0 8px" } },
         ...months.map((m, i) => {
           const chargesHT = Object.entries(m.charges_detail || {}).filter(([c]) => c !== "Transferts internes" && c !== "Épargne & Placements").reduce((s, [, v]) => s + v, 0);
@@ -217,7 +217,7 @@ function TresorerieTab() {
     
     // Monthly detail table
     React.createElement("div", { style: cardStyle },
-      React.createElement("h3", { style: { fontFamily: "'DM Serif Display', serif", fontSize: 18, marginBottom: 16 } }, "Détail mensuel"),
+      React.createElement("h3", { style: { fontFamily: "'Inter', sans-serif", fontSize: 18, marginBottom: 16 } }, "Détail mensuel"),
       React.createElement("div", { style: { overflowX: "auto" } },
         React.createElement("table", { style: { width: "100%", borderCollapse: "collapse", fontSize: 13 } },
           React.createElement("thead", null,
@@ -254,7 +254,7 @@ function TresorerieTab() {
     
     // Top charges categories
     React.createElement("div", { style: cardStyle },
-      React.createElement("h3", { style: { fontFamily: "'DM Serif Display', serif", fontSize: 18, marginBottom: 16 } }, "Répartition des charges (8 mois)"),
+      React.createElement("h3", { style: { fontFamily: "'Inter', sans-serif", fontSize: 18, marginBottom: 16 } }, "Répartition des charges (8 mois)"),
       ...sortedCharges.map(([cat, val], i) => {
         const pct = (val / totalChargesHorsTransferts) * 100;
         return React.createElement("div", { key: i, style: { marginBottom: 8 } },
@@ -366,7 +366,7 @@ function PrimesTab() {
               <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", color: "#d14718", marginBottom: 4 }}>
                 {selectedClient.nb_ex >= 3 ? "Client Fidèle" : selectedClient.nb_ex === 2 ? "Client Récurrent" : "Client Ponctuel"}
               </div>
-              <div style={{ fontFamily: "'DM Serif Display', serif", fontSize: 22, fontWeight: 700, color: "#111", lineHeight: 1.2 }}>
+              <div style={{ fontFamily: "'Inter', sans-serif", fontSize: 22, fontWeight: 700, color: "#111", lineHeight: 1.2 }}>
                 {selectedClient.name}
               </div>
               <div style={{ fontSize: 12, color: "#888", marginTop: 4 }}>Compte {selectedClient.id}</div>
@@ -374,7 +374,7 @@ function PrimesTab() {
             <div className="side-panel-body">
               <div className="sp-section">
                 <div className="sp-section-title">Chiffre d'affaires</div>
-                <div className="sp-row"><span className="sp-row-label">CA HT Total</span><span className="sp-row-value" style={{ color: "#d14718", fontSize: 18, fontFamily: "'DM Serif Display', serif" }}>{fmt(selectedClient.ca_ht)}</span></div>
+                <div className="sp-row"><span className="sp-row-label">CA HT Total</span><span className="sp-row-value" style={{ color: "#d14718", fontSize: 18, fontFamily: "'Inter', sans-serif" }}>{fmt(selectedClient.ca_ht)}</span></div>
                 <div className="sp-row"><span className="sp-row-label">CA TTC Total</span><span className="sp-row-value">{fmt(selectedClient.ca_ttc)}</span></div>
                 <div className="sp-row"><span className="sp-row-label">Panier moyen HT</span><span className="sp-row-value">{fmt(selectedClient.ca_ht / selectedClient.nb_factures)}</span></div>
               </div>
@@ -668,7 +668,7 @@ function ClientsTab() {
               <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", color: "#d14718", marginBottom: 4 }}>
                 {selectedClient.nb_ex >= 3 ? "Client Fidèle" : selectedClient.nb_ex === 2 ? "Client Récurrent" : "Client Ponctuel"}
               </div>
-              <div style={{ fontFamily: "'DM Serif Display', serif", fontSize: 22, fontWeight: 700, color: "#111", lineHeight: 1.2 }}>
+              <div style={{ fontFamily: "'Inter', sans-serif", fontSize: 22, fontWeight: 700, color: "#111", lineHeight: 1.2 }}>
                 {selectedClient.name}
               </div>
               <div style={{ fontSize: 12, color: "#888", marginTop: 4 }}>Compte {selectedClient.id}</div>
@@ -676,7 +676,7 @@ function ClientsTab() {
             <div className="side-panel-body">
               <div className="sp-section">
                 <div className="sp-section-title">Chiffre d'affaires</div>
-                <div className="sp-row"><span className="sp-row-label">CA HT Total</span><span className="sp-row-value" style={{ color: "#d14718", fontSize: 18, fontFamily: "'DM Serif Display', serif" }}>{fmt(selectedClient.ca_ht)}</span></div>
+                <div className="sp-row"><span className="sp-row-label">CA HT Total</span><span className="sp-row-value" style={{ color: "#d14718", fontSize: 18, fontFamily: "'Inter', sans-serif" }}>{fmt(selectedClient.ca_ht)}</span></div>
                 <div className="sp-row"><span className="sp-row-label">CA TTC Total</span><span className="sp-row-value">{fmt(selectedClient.ca_ttc)}</span></div>
                 <div className="sp-row"><span className="sp-row-label">Panier moyen HT</span><span className="sp-row-value">{fmt(selectedClient.ca_ht / selectedClient.nb_factures)}</span></div>
               </div>
@@ -932,7 +932,7 @@ function ComptaTab() {
   
   const cardStyle = { background: "#fff", borderRadius: 12, border: "1.5px solid #e5e5e5", padding: 20, marginBottom: 16 };
   const kpiStyle = { textAlign: "center", flex: 1, padding: 12 };
-  const kpiVal = { fontSize: 28, fontWeight: 800, color: "#111", fontFamily: "'DM Serif Display', serif" };
+  const kpiVal = { fontSize: 28, fontWeight: 800, color: "#111", fontFamily: "'Inter', sans-serif" };
   const kpiLabel = { fontSize: 11, color: "#888", marginTop: 4, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.5px" };
   const kpiSubtitle = { fontSize: 10, color: "#aaa", marginTop: 2 };
 
@@ -978,7 +978,7 @@ function ComptaTab() {
 
     // Monthly CA vs Charges bar chart
     React.createElement("div", { style: cardStyle },
-      React.createElement("h3", { style: { fontFamily: "'DM Serif Display', serif", fontSize: 18, marginBottom: 16 } }, "CA et Charges par mois"),
+      React.createElement("h3", { style: { fontFamily: "'Inter', sans-serif", fontSize: 18, marginBottom: 16 } }, "CA et Charges par mois"),
       React.createElement("div", { style: { display: "flex", gap: 8, alignItems: "flex-end", height: 240, padding: "0 8px" } },
         ...months.map((m, i) => {
           const ca = monthsSig["Production vendue"][i];
@@ -1009,7 +1009,7 @@ function ComptaTab() {
 
     // SIG Waterfall summary
     React.createElement("div", { style: cardStyle },
-      React.createElement("h3", { style: { fontFamily: "'DM Serif Display', serif", fontSize: 18, marginBottom: 16 } }, "Cascade SIG (7 mois cumulés)"),
+      React.createElement("h3", { style: { fontFamily: "'Inter', sans-serif", fontSize: 18, marginBottom: 16 } }, "Cascade SIG (7 mois cumulés)"),
       React.createElement("div", { style: { display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: 12 } },
         React.createElement("div", { style: { textAlign: "center", padding: 12, background: "#f9f9f9", borderRadius: 8 } },
           React.createElement("div", { style: { fontSize: 12, fontWeight: 600, color: "#888" } }, "CA"),
@@ -1041,7 +1041,7 @@ function ComptaTab() {
     // Bilan snapshot
     React.createElement("div", { style: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 16 } },
       React.createElement("div", { style: cardStyle },
-        React.createElement("h3", { style: { fontFamily: "'DM Serif Display', serif", fontSize: 18, marginBottom: 16 } }, "Bilan 31/10/2025"),
+        React.createElement("h3", { style: { fontFamily: "'Inter', sans-serif", fontSize: 18, marginBottom: 16 } }, "Bilan 31/10/2025"),
         React.createElement("div", { style: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8, fontSize: 12 } },
           React.createElement("div", null,
             React.createElement("div", { style: { fontWeight: 600, color: "#666", marginBottom: 8 } }, "ACTIF"),
@@ -1068,7 +1068,7 @@ function ComptaTab() {
         )
       ),
       React.createElement("div", { style: cardStyle },
-        React.createElement("h3", { style: { fontFamily: "'DM Serif Display', serif", fontSize: 18, marginBottom: 16 } }, "Variation 31/05 vs 31/10"),
+        React.createElement("h3", { style: { fontFamily: "'Inter', sans-serif", fontSize: 18, marginBottom: 16 } }, "Variation 31/05 vs 31/10"),
         React.createElement("div", { style: { display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8, fontSize: 11 } },
           ["Actif immobilisé net", "Créances clients", "Disponibilités", "Total actif", "Capitaux propres", "Emprunts et dettes"].map((item, i) => {
             const val0510 = data.bilan["31/10/2025"][item];
@@ -1087,7 +1087,7 @@ function ComptaTab() {
 
     // Revenue breakdown stacked bar
     React.createElement("div", { style: cardStyle },
-      React.createElement("h3", { style: { fontFamily: "'DM Serif Display', serif", fontSize: 18, marginBottom: 16 } }, "Ventilation du CA par type de prestation"),
+      React.createElement("h3", { style: { fontFamily: "'Inter', sans-serif", fontSize: 18, marginBottom: 16 } }, "Ventilation du CA par type de prestation"),
       React.createElement("div", null,
         months.map((m, i) => {
           const monthRevenueBreakdown = {};
@@ -1131,7 +1131,7 @@ function ComptaTab() {
 
     // SIG detail table
     React.createElement("div", { style: cardStyle },
-      React.createElement("h3", { style: { fontFamily: "'DM Serif Display', serif", fontSize: 18, marginBottom: 16 } }, "Détail mensuel SIG"),
+      React.createElement("h3", { style: { fontFamily: "'Inter', sans-serif", fontSize: 18, marginBottom: 16 } }, "Détail mensuel SIG"),
       React.createElement("div", { style: { overflowX: "auto" } },
         React.createElement("table", { style: { width: "100%", borderCollapse: "collapse", fontSize: 11 } },
           React.createElement("thead", null,
@@ -1187,7 +1187,7 @@ function App() {
         <div style={{ maxWidth: 1100, margin: "0 auto", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
           <div>
             <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 2 }}>
-              <span style={{ fontFamily: "'DM Serif Display', serif", fontSize: 22, letterSpacing: -0.5 }}>
+              <span style={{ fontFamily: "'Inter', sans-serif", fontSize: 22, letterSpacing: -0.5 }}>
                 <span style={{ color: "#d14718" }}>PME</span><span>BTP</span>
               </span>
               <span style={{ fontSize: 11, fontWeight: 700, color: "#d14718", textTransform: "uppercase", letterSpacing: 1.5, background: "rgba(209,71,24,0.08)", padding: "3px 8px", borderRadius: 4 }}>DASHBOARD</span>
