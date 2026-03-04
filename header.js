@@ -10,6 +10,7 @@
     { url: '/mission-csm.html', label: 'Offre de mission', tag: 'Mission freelance', title: 'CSM — Customer Success Manager' },
     { url: '/offre-cos.html', label: 'Offre de mission', tag: 'Mission freelance', title: 'Chief of Staff / Dir. Opérations' },
     { url: '/candidatures.html', label: 'Outil interne', tag: 'Outil interne', title: 'Suivi Candidatures' },
+    { url: '/kaki-dashboard.html', label: 'Due Diligence', tag: 'Due Diligence', title: 'KAKI — Dashboard Financier' },
   ];
 
   // Inject shared styles
