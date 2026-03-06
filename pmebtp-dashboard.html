@@ -286,10 +286,16 @@ function PrimesTab() {
   const [selRenewContract, setSelRenewContract] = useState("mixte");
   const [customRenewAmount, setCustomRenewAmount] = useState("");
   const [selRenewOptions, setSelRenewOptions] = useState([]);
+  const [renew3Entries, setRenew3Entries] = useState([]);
+  const [selRenew3Contract, setSelRenew3Contract] = useState("mixte");
+  const [customRenew3Amount, setCustomRenew3Amount] = useState("");
+  const [selRenew3Options, setSelRenew3Options] = useState([]);
   const [fixe, setFixe] = useState(2708);
   const [simNewPerMonth, setSimNewPerMonth] = useState(12000);
   const [simRenewStart, setSimRenewStart] = useState(0);
   const [simRenewGrowth, setSimRenewGrowth] = useState(0);
+  const [simRenew3Start, setSimRenew3Start] = useState(0);
+  const [simRenew3Growth, setSimRenew3Growth] = useState(0);
 
   const toggleOpt = (optId, list, setter) => {
     setter(list.includes(optId) ? list.filter(o => o !== optId) : [...list, optId]);
@@ -312,22 +318,33 @@ function PrimesTab() {
     setSelRenewOptions([]); setCustomRenewAmount("");
   };
 
+  const addRenew3 = () => {
+    const contract = CONTRACTS.find(c => c.id === selRenew3Contract);
+    const baseAmount = contract.custom ? Number(customRenew3Amount) || 0 : contract.amount;
+    const optTotal = selRenew3Options.reduce((s, oid) => s + (OPTIONS.find(o => o.id === oid)?.amount || 0), 0);
+    if (baseAmount === 0 && optTotal === 0) return;
+    setRenew3Entries([...renew3Entries, { id: uid(), contract: contract.label, baseAmount, options: selRenew3Options.map(oid => OPTIONS.find(o => o.id === oid)).filter(Boolean), optTotal, total: baseAmount + optTotal, commission: (baseAmount + optTotal) * 0.03 }]);
+    setSelRenew3Options([]); setCustomRenew3Amount("");
+  };
+
   const newCA = entries.reduce((s, e) => s + e.total, 0);
   const newComm = entries.reduce((s, e) => s + e.commission, 0);
   const renewCA = renewEntries.reduce((s, e) => s + e.total, 0);
   const renewComm = renewEntries.reduce((s, e) => s + e.commission, 0);
-  const totalComm = newComm + renewComm;
+  const renew3CA = renew3Entries.reduce((s, e) => s + e.total, 0);
+  const renew3Comm = renew3Entries.reduce((s, e) => s + e.commission, 0);
+  const totalComm = newComm + renewComm + renew3Comm;
 
   const simData = useMemo(() => {
-    const months = []; let cumulRenew = simRenewStart; let totalNew = 0; let totalRenew = 0; let totalComm = 0;
+    const months = []; let cumulRenew = simRenewStart; let cumulRenew3 = simRenew3Start; let totalNew = 0; let totalRenew = 0; let totalRenew3 = 0; let totalComm = 0;
     for (let i = 0; i < 12; i++) {
-      const cN = simNewPerMonth * 0.1; const cR = cumulRenew * 0.05; const cT = cN + cR;
-      totalNew += simNewPerMonth; totalRenew += cumulRenew; totalComm += cT;
-      months.push({ month: MONTHS[i], newCA: simNewPerMonth, renewCA: cumulRenew, commNew: cN, commRenew: cR, commTotal: cT, brut: fixe + cT });
-      cumulRenew += simRenewGrowth;
+      const cN = simNewPerMonth * 0.1; const cR = cumulRenew * 0.05; const cR3 = cumulRenew3 * 0.03; const cT = cN + cR + cR3;
+      totalNew += simNewPerMonth; totalRenew += cumulRenew; totalRenew3 += cumulRenew3; totalComm += cT;
+      months.push({ month: MONTHS[i], newCA: simNewPerMonth, renewCA: cumulRenew, renew3CA: cumulRenew3, commNew: cN, commRenew: cR, commRenew3: cR3, commTotal: cT, brut: fixe + cT });
+      cumulRenew += simRenewGrowth; cumulRenew3 += simRenew3Growth;
     }
-    return { months, totalNew, totalRenew, totalComm, annualVariable: totalComm, annualBrut: fixe * 12 + totalComm };
-  }, [fixe, simNewPerMonth, simRenewStart, simRenewGrowth]);
+    return { months, totalNew, totalRenew, totalRenew3, totalComm, annualVariable: totalComm, annualBrut: fixe * 12 + totalComm };
+  }, [fixe, simNewPerMonth, simRenewStart, simRenewGrowth, simRenew3Start, simRenew3Growth]);
 
   const maxComm = Math.max(...simData.months.map(m => m.commTotal), 1);
 
@@ -397,6 +414,16 @@ function PrimesTab() {
           ))}
           {renewEntries.length === 0 && <div style={{ textAlign: "center", padding: "20px 0", color: "#ccc", fontSize: 13 }}>Aucun renouvellement année 1 ajouté</div>}
 
+          <EntryForm color="#9333ea" label="Renouvellements Année 3 — 3% commission" contract={selRenew3Contract} setContract={setSelRenew3Contract} custom={customRenew3Amount} setCustom={setCustomRenew3Amount} opts={selRenew3Options} setOpts={setSelRenew3Options} onAdd={addRenew3} />
+          {renew3Entries.map(e => (
+            <div key={e.id} style={{ background: "#fff", border: "1px solid #eee", borderLeft: "4px solid #9333ea", borderRadius: "0 8px 8px 0", padding: "12px 16px", marginBottom: 6, display: "flex", alignItems: "center", gap: 12 }}>
+              <div style={{ flex: 1 }}><div style={{ fontSize: 14, fontWeight: 600 }}>{e.contract}</div>{e.options.length > 0 && <div style={{ fontSize: 12, color: "#999", marginTop: 2 }}>+ {e.options.map(o => o.label).join(", ")}</div>}</div>
+              <div style={{ textAlign: "right" }}><div style={{ fontSize: 13, fontWeight: 700 }}>{fmt(e.total)} HT</div><div style={{ fontSize: 12, fontWeight: 700, color: "#9333ea" }}>→ {fmtDec(e.commission)}</div></div>
+              <button onClick={() => setRenew3Entries(renew3Entries.filter(x => x.id !== e.id))} style={{ width: 26, height: 26, borderRadius: 6, border: "1px solid #eee", background: "transparent", cursor: "pointer", fontSize: 13, color: "#ccc" }}>✕</button>
+            </div>
+          ))}
+          {renew3Entries.length === 0 && <div style={{ textAlign: "center", padding: "20px 0", color: "#ccc", fontSize: 13 }}>Aucun renouvellement année 3 ajouté</div>}
+
           <div style={{ background: "#fff", border: "2px solid #d14718", borderRadius: 12, overflow: "hidden", marginTop: 20 }}>
             <div style={{ background: "#d14718", padding: "12px 20px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
               <span style={{ fontSize: 13, fontWeight: 700, color: "#fff", textTransform: "uppercase", letterSpacing: 1 }}>Total commissions du mois</span>
@@ -405,6 +432,7 @@ function PrimesTab() {
             <div style={{ padding: "14px 20px", display: "flex", gap: 24, flexWrap: "wrap" }}>
               <div><div style={{ fontSize: 11, fontWeight: 600, color: "#999", marginBottom: 2 }}>CA New Business</div><div style={{ fontSize: 16, fontWeight: 700, color: "#2d6a4f" }}>{fmt(newCA)} <span style={{ fontSize: 12, color: "#999", fontWeight: 500 }}>→ {fmtDec(newComm)}</span></div></div>
               <div><div style={{ fontSize: 11, fontWeight: 600, color: "#999", marginBottom: 2 }}>CA Renew An 1</div><div style={{ fontSize: 16, fontWeight: 700, color: "#1a5fb4" }}>{fmt(renewCA)} <span style={{ fontSize: 12, color: "#999", fontWeight: 500 }}>→ {fmtDec(renewComm)}</span></div></div>
+              <div><div style={{ fontSize: 11, fontWeight: 600, color: "#999", marginBottom: 2 }}>CA Renew An 3</div><div style={{ fontSize: 16, fontWeight: 700, color: "#9333ea" }}>{fmt(renew3CA)} <span style={{ fontSize: 12, color: "#999", fontWeight: 500 }}>→ {fmtDec(renew3Comm)}</span></div></div>
               <div style={{ marginLeft: "auto", textAlign: "right" }}><div style={{ fontSize: 11, fontWeight: 600, color: "#999", marginBottom: 2 }}>Brut estimé (fixe 2 708€ + var.)</div><div style={{ fontSize: 20, fontWeight: 800 }}>{fmt(2708 + totalComm)}</div></div>
             </div>
           </div>
@@ -415,11 +443,13 @@ function PrimesTab() {
         <div>
           <div style={{ background: "#fff", border: "1.5px solid #e5e5e5", borderRadius: 12, padding: 20, marginBottom: 24 }}>
             <div style={{ fontSize: 11, fontWeight: 700, color: "#d14718", textTransform: "uppercase", letterSpacing: 1.5, marginBottom: 16 }}>Paramètres de simulation</div>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 16 }}>
               {[{ label: "Fixe brut mensuel", val: fixe, set: setFixe, min: 1500, max: 4000, step: 50, color: "#1a1a1a" },
                 { label: "CA New Business / mois", val: simNewPerMonth, set: setSimNewPerMonth, min: 0, max: 60000, step: 1000, color: "#2d6a4f" },
                 { label: "CA Renew au démarrage", val: simRenewStart, set: setSimRenewStart, min: 0, max: 40000, step: 500, color: "#1a5fb4" },
-                { label: "Croissance renew / mois", val: simRenewGrowth, set: setSimRenewGrowth, min: 0, max: 10000, step: 250, color: "#1a5fb4", prefix: "+" },
+                { label: "Croissance renew Y1 / mois", val: simRenewGrowth, set: setSimRenewGrowth, min: 0, max: 10000, step: 250, color: "#1a5fb4", prefix: "+" },
+                { label: "CA Renew Y3 au démarrage", val: simRenew3Start, set: setSimRenew3Start, min: 0, max: 40000, step: 500, color: "#9333ea" },
+                { label: "Croissance renew Y3 / mois", val: simRenew3Growth, set: setSimRenew3Growth, min: 0, max: 10000, step: 250, color: "#9333ea", prefix: "+" },
               ].map((p,i) => (
                 <div key={i}>
                   <label style={{ fontSize: 12, fontWeight: 600, color: "#666", display: "block", marginBottom: 6 }}>{p.label}</label>
@@ -444,11 +474,12 @@ function PrimesTab() {
             <div style={{ fontSize: 11, fontWeight: 700, color: "#888", textTransform: "uppercase", letterSpacing: 1.5, marginBottom: 16 }}>Commission mensuelle — projection 12 mois</div>
             <div className="bar-chart">
               {simData.months.map((m,i) => {
-                const hN = (m.commNew / maxComm) * 160; const hR = (m.commRenew / maxComm) * 160;
+                const hN = (m.commNew / maxComm) * 160; const hR = (m.commRenew / maxComm) * 160; const hR3 = (m.commRenew3 / maxComm) * 160;
                 return <div key={i} className="bar-col">
                   <div className="bar-value">{fmtK(m.commTotal)}</div>
-                  <div style={{ width: "70%", height: hR, background: "#1a5fb4", borderRadius: "4px 4px 0 0", minHeight: hR > 0 ? 2 : 0 }} />
-                  <div style={{ width: "70%", height: hN, background: "#2d6a4f", borderRadius: hR > 0 ? 0 : "4px 4px 0 0" }} />
+                  <div style={{ width: "70%", height: hR3, background: "#9333ea", borderRadius: "4px 4px 0 0", minHeight: hR3 > 0 ? 2 : 0 }} />
+                  <div style={{ width: "70%", height: hR, background: "#1a5fb4", borderRadius: hR3 > 0 ? 0 : "4px 4px 0 0", minHeight: hR > 0 ? 2 : 0 }} />
+                  <div style={{ width: "70%", height: hN, background: "#2d6a4f", borderRadius: (hR > 0 || hR3 > 0) ? 0 : "4px 4px 0 0" }} />
                   <div className="bar-label">{m.month}</div>
                 </div>;
               })}
@@ -456,16 +487,17 @@ function PrimesTab() {
             <div style={{ display: "flex", gap: 20, justifyContent: "center", marginTop: 14 }}>
               <div style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 11, color: "#666" }}><div style={{ width: 12, height: 12, borderRadius: 3, background: "#2d6a4f" }} /> New business (10%)</div>
               <div style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 11, color: "#666" }}><div style={{ width: 12, height: 12, borderRadius: 3, background: "#1a5fb4" }} /> Renew an 1 (5%)</div>
+              <div style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 11, color: "#666" }}><div style={{ width: 12, height: 12, borderRadius: 3, background: "#9333ea" }} /> Renew an 3 (3%)</div>
             </div>
           </div>
           <div style={{ marginTop: 20 }}>
             <div style={{ fontSize: 11, fontWeight: 700, color: "#888", textTransform: "uppercase", letterSpacing: 1.5, marginBottom: 10 }}>Scénarios rapides</div>
             <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-              {[{ label: "Junior (iso Virgile)", n: 12000, rs: 0, rg: 2000, f: 2708 },
-                { label: "Confirmé", n: 20000, rs: 5000, rg: 3000, f: 2708 },
-                { label: "Senior", n: 30000, rs: 10000, rg: 4000, f: 3000 },
-                { label: "Top performer", n: 40000, rs: 15000, rg: 5000, f: 3000 },
-              ].map(p => <button key={p.label} onClick={() => { setSimNewPerMonth(p.n); setSimRenewStart(p.rs); setSimRenewGrowth(p.rg); setFixe(p.f); }} style={{ padding: "8px 16px", borderRadius: 6, border: "1.5px solid #e5e5e5", background: "#fff", color: "#666", fontSize: 12, fontWeight: 600, cursor: "pointer" }}>{p.label}</button>)}
+              {[{ label: "Junior (iso Virgile)", n: 12000, rs: 0, rg: 2000, r3s: 0, r3g: 0, f: 2708 },
+                { label: "Confirmé", n: 20000, rs: 5000, rg: 3000, r3s: 2000, r3g: 1000, f: 2708 },
+                { label: "Senior", n: 30000, rs: 10000, rg: 4000, r3s: 8000, r3g: 2000, f: 3000 },
+                { label: "Top performer", n: 40000, rs: 15000, rg: 5000, r3s: 15000, r3g: 3000, f: 3000 },
+              ].map(p => <button key={p.label} onClick={() => { setSimNewPerMonth(p.n); setSimRenewStart(p.rs); setSimRenewGrowth(p.rg); setSimRenew3Start(p.r3s); setSimRenew3Growth(p.r3g); setFixe(p.f); }} style={{ padding: "8px 16px", borderRadius: 6, border: "1.5px solid #e5e5e5", background: "#fff", color: "#666", fontSize: 12, fontWeight: 600, cursor: "pointer" }}>{p.label}</button>)}
             </div>
           </div>
         </div>
