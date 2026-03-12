@@ -76,6 +76,27 @@
   .offer-row:last-child { border-bottom: none; }
   .offer-label { width: 140px; flex-shrink: 0; font-size: 13px; font-weight: 700; color: var(--text-black); }
   .offer-value { font-size: 13px; color: var(--text-dark); flex: 1; }
+  .sim-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 8px; }
+  .sim-table th { background: var(--primary); color: white; font-weight: 600; text-align: left; padding: 10px 14px; font-size: 12px; letter-spacing: 0.3px; }
+  .sim-table th:first-child { border-radius: 8px 0 0 0; }
+  .sim-table th:last-child { border-radius: 0 8px 0 0; }
+  .sim-table td { padding: 10px 14px; border-bottom: 1px solid var(--border); color: var(--text-dark); }
+  .sim-table tr:last-child td { border-bottom: none; }
+  .sim-table tr:hover td { background: var(--primary-soft); }
+  .sim-table .row-total td { font-weight: 700; color: var(--text-black); background: var(--primary-soft); border-top: 2px solid var(--primary); }
+  .sim-table .row-gain td { color: #16a34a; font-weight: 600; }
+  .commission-card { background: var(--bg); border: 1.5px solid var(--border); border-radius: 10px; padding: 18px 20px; margin-bottom: 10px; }
+  .commission-card .comm-title { font-size: 14px; font-weight: 700; color: var(--text-black); margin-bottom: 6px; }
+  .commission-card .comm-detail { font-size: 13px; color: var(--text-mid); line-height: 1.6; }
+  .commission-card .comm-rate { font-size: 20px; font-weight: 800; color: var(--primary); }
+  .highlight-box { background: linear-gradient(135deg, var(--primary-soft) 0%, #fff5f0 100%); border: 1.5px solid rgba(209, 71, 24, 0.2); border-radius: 12px; padding: 24px; margin: 20px 0; text-align: center; }
+  .highlight-box .big-number { font-size: 36px; font-weight: 900; color: var(--primary); line-height: 1; }
+  .highlight-box .big-label { font-size: 14px; color: var(--text-mid); margin-top: 6px; font-weight: 500; }
+  .year-tabs { display: flex; gap: 8px; margin-bottom: 16px; }
+  .year-tab { flex: 1; text-align: center; padding: 10px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: default; }
+  .year-tab.y1 { background: #fef3c7; color: #92400e; }
+  .year-tab.y2 { background: #d1fae5; color: #065f46; }
+  .year-tab.y3 { background: #dbeafe; color: #1e40af; }
   .cta-section { text-align: center; margin-top: 40px; padding: 36px 24px; background: var(--primary-soft); border-radius: 14px; border: 1.5px solid rgba(209, 71, 24, 0.15); }
   .cta-section p { font-size: 16px; color: var(--text-dark); margin-bottom: 20px; line-height: 1.6; font-weight: 500; }
   .cta-btn { display: inline-block; background: var(--primary); color: white; font-size: 15px; font-weight: 700; padding: 14px 32px; border-radius: 8px; text-decoration: none; transition: background 0.2s, transform 0.15s; box-shadow: 0 4px 16px rgba(209, 71, 24, 0.25); }
@@ -153,16 +174,136 @@
     <h2>Les modalités</h2>
     <div class="offer-box">
       <div class="offer-row"><div class="offer-label">Contrat</div><div class="offer-value">CDI</div></div>
-      <div class="offer-row"><div class="offer-label">Rémunération</div><div class="offer-value">Fixe + commissions (à définir ensemble selon ton expérience)</div></div>
-      <div class="offer-row"><div class="offer-label">Localisation</div><div class="offer-value">Paris au démarrage, transition vers du remote</div></div>
+      <div class="offer-row"><div class="offer-label">Fixe</div><div class="offer-value"><strong>33 000€ brut/an</strong> (2 750€/mois) — revalorisé +10% par an</div></div>
+      <div class="offer-row"><div class="offer-label">Commissions</div><div class="offer-value"><strong>10%</strong> sur chaque vente + <strong>5%</strong> sur le renouvellement année 2 + <strong>3%</strong> année 3</div></div>
+      <div class="offer-row"><div class="offer-label">Plafond</div><div class="offer-value"><strong>Aucun.</strong> Plus tu vends, plus tu gagnes. Pas de limite.</div></div>
+      <div class="offer-row"><div class="offer-label">Localisation</div><div class="offer-value">Paris au démarrage → Full remote</div></div>
       <div class="offer-row"><div class="offer-label">Démarrage</div><div class="offer-value">Dès que possible</div></div>
       <div class="offer-row"><div class="offer-label">Perspective</div><div class="offer-value">Évolution vers Responsable Commercial / Head of Sales</div></div>
     </div>
   </div>
 
+  <div class="section">
+    <div class="section-label">Comment ça marche</div>
+    <h2>Le système de commissions</h2>
+    <p>Le modèle est simple et transparent : tu touches une commission sur chaque vente, et cette commission se prolonge quand le client renouvelle. Plus tu signes de bons clients qui restent, plus tes revenus s'empilent année après année.</p>
+
+    <div class="commission-card">
+      <div style="display: flex; align-items: center; justify-content: space-between;">
+        <div>
+          <div class="comm-title">Commission sur la vente</div>
+          <div class="comm-detail">Sur chaque nouveau contrat que tu signes</div>
+        </div>
+        <div class="comm-rate">10%</div>
+      </div>
+    </div>
+
+    <div class="commission-card">
+      <div style="display: flex; align-items: center; justify-content: space-between;">
+        <div>
+          <div class="comm-title">Renouvellement année 2</div>
+          <div class="comm-detail">Quand ton client renouvelle la 2e année</div>
+        </div>
+        <div class="comm-rate">5%</div>
+      </div>
+    </div>
+
+    <div class="commission-card">
+      <div style="display: flex; align-items: center; justify-content: space-between;">
+        <div>
+          <div class="comm-title">Renouvellement année 3</div>
+          <div class="comm-detail">Quand ton client renouvelle la 3e année</div>
+        </div>
+        <div class="comm-rate">3%</div>
+      </div>
+    </div>
+
+    <p style="margin-top: 16px; font-size: 14px; color: var(--text-mid);">Le fixe est revalorisé de <strong>+10% par an</strong>. En année 2, ton fixe passe à 36 300€. En année 3, à 39 930€.</p>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Simulation sur 3 ans</div>
+    <h2>Ce que ça donne concrètement</h2>
+    <p>Voici une projection réaliste basée sur une montée en puissance progressive, avec un taux de rétention client de 80-85%.</p>
+
+    <div class="year-tabs">
+      <div class="year-tab y1">Année 1 · Rampe</div>
+      <div class="year-tab y2">Année 2 · Croisière</div>
+      <div class="year-tab y3">Année 3 · Performance</div>
+    </div>
+
+    <table class="sim-table">
+      <thead>
+        <tr>
+          <th></th>
+          <th>Année 1</th>
+          <th>Année 2</th>
+          <th>Année 3</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>CA nouvelles ventes /mois</td>
+          <td>10 000€</td>
+          <td>20 000€</td>
+          <td>30 000€</td>
+        </tr>
+        <tr>
+          <td>Fixe annuel (+10%/an)</td>
+          <td>33 000€</td>
+          <td>36 300€</td>
+          <td>39 930€</td>
+        </tr>
+        <tr>
+          <td>Com. nouvelles ventes (10%)</td>
+          <td>12 000€</td>
+          <td>24 000€</td>
+          <td>36 000€</td>
+        </tr>
+        <tr>
+          <td>Com. renouvellements (5%)</td>
+          <td>—</td>
+          <td>4 800€</td>
+          <td>10 200€</td>
+        </tr>
+        <tr>
+          <td>Com. renouvellements (3%)</td>
+          <td>—</td>
+          <td>—</td>
+          <td>2 448€</td>
+        </tr>
+        <tr class="row-total">
+          <td>Total brut annuel</td>
+          <td><strong>45 000€</strong></td>
+          <td><strong>65 100€</strong></td>
+          <td><strong>88 578€</strong></td>
+        </tr>
+        <tr>
+          <td>Soit par mois</td>
+          <td>3 750€</td>
+          <td>5 425€</td>
+          <td>7 382€</td>
+        </tr>
+        <tr class="row-gain">
+          <td>Gain vs. 42K€ actuel</td>
+          <td>+3 000€</td>
+          <td>+23 100€</td>
+          <td>+46 578€</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="highlight-box" style="margin-top: 24px;">
+      <div class="big-number">×2</div>
+      <div class="big-label">En 3 ans, tu doubles ton salaire actuel. Sans plafond.</div>
+    </div>
+
+    <p style="margin-top: 16px; font-size: 13px; color: var(--text-light);">Hypothèses : rétention client 80% en Y2, 85% en Y3. Les commissions de renouvellement s'empilent — plus ton portefeuille grandit, plus le « socle » de revenus passifs augmente chaque année.</p>
+  </div>
+
   <div class="cta-section">
-    <p>Ce n'est pas juste un poste de commercial.<br>C'est l'opportunité d'arriver au moment du rachat, de faire partie du noyau dur de la nouvelle équipe, et de grandir avec l'entreprise.</p>
-    <a href="mailto:theau@samsara.am?subject=Candidature%20Commercial%20PME%20BTP" class="cta-btn">Répondre à cette offre →</a>
+    <p>Ce n'est pas juste un poste de commercial.<br>C'est un deal où plus tu gagnes, plus on gagne. Pas de plafond, pas de politique. Juste la performance.</p>
+    <a href="mailto:theau@samsara.am?subject=Candidature%20Commercial%20PME%20BTP" class="cta-btn">On en discute ? →</a>
   </div>
 
   <div class="footer">
