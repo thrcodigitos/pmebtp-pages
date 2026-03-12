@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PME BTP — Offre Commercial</title>
+<title>PME BTP — Directeur Commercial</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -103,6 +103,29 @@
   .cta-btn:hover { background: #b83d14; transform: translateY(-1px); }
   .footer { text-align: center; padding: 32px 24px; font-size: 12px; color: var(--text-light); border-top: 1px solid var(--border); margin-top: 40px; }
   .footer a { color: var(--primary); text-decoration: none; }
+
+  .vision-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 20px 0; }
+  @media (max-width: 600px) { .vision-grid { grid-template-columns: 1fr; } }
+  .vision-card { background: var(--bg); border: 1.5px solid var(--border); border-radius: 10px; padding: 20px; text-align: center; transition: border-color 0.2s, box-shadow 0.2s; }
+  .vision-card:hover { border-color: var(--primary); box-shadow: 0 4px 16px rgba(209, 71, 24, 0.08); }
+  .vision-card .vc-number { font-size: 28px; font-weight: 900; color: var(--primary); line-height: 1; }
+  .vision-card .vc-label { font-size: 12px; font-weight: 600; color: var(--text-mid); margin-top: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .vision-card .vc-detail { font-size: 13px; color: var(--text-light); margin-top: 4px; }
+
+  .evolution-timeline { position: relative; margin: 24px 0; padding-left: 32px; }
+  .evolution-timeline::before { content: ''; position: absolute; left: 11px; top: 0; bottom: 0; width: 2px; background: linear-gradient(to bottom, var(--primary), rgba(209, 71, 24, 0.2)); }
+  .evo-step { position: relative; margin-bottom: 24px; }
+  .evo-step:last-child { margin-bottom: 0; }
+  .evo-dot { position: absolute; left: -27px; top: 4px; width: 14px; height: 14px; border-radius: 50%; background: var(--primary); border: 3px solid var(--primary-soft); }
+  .evo-step.future .evo-dot { background: var(--bg); border: 3px solid var(--primary); }
+  .evo-period { font-size: 11px; font-weight: 700; color: var(--primary); letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 4px; }
+  .evo-title { font-size: 16px; font-weight: 700; color: var(--text-black); margin-bottom: 4px; }
+  .evo-desc { font-size: 14px; color: var(--text-mid); line-height: 1.6; }
+
+  .cfl-box { background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%); border: 1.5px solid rgba(22, 163, 74, 0.2); border-radius: 12px; padding: 24px; margin: 20px 0; }
+  .cfl-box .cfl-title { font-size: 16px; font-weight: 700; color: #15803d; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+  .cfl-box .cfl-text { font-size: 14px; color: #166534; line-height: 1.7; }
+  .cfl-box .cfl-stat { display: inline-block; background: #15803d; color: white; font-weight: 700; font-size: 13px; padding: 4px 10px; border-radius: 6px; margin-right: 4px; }
 </style>
 <script src="/header.js" defer></script>
 </head>
@@ -110,7 +133,7 @@
 
 <div class="hero">
   <div class="badge">Offre d'emploi</div>
-  <h1>Commercial / Futur Responsable Commercial</h1>
+  <h1>Directeur Commercial en devenir</h1>
   <div class="hero-meta">
     <div class="hero-meta-item"><div class="dot"></div>CDI</div>
     <div class="hero-meta-item"><div class="dot"></div>Paris → Remote</div>
@@ -133,26 +156,58 @@
   </div>
 
   <div class="section">
-    <div class="section-label">La mission</div>
-    <h2>Apprendre, structurer, prendre les commandes</h2>
-    <p>Tu rejoindras l'équipe commerciale existante (2 personnes) et travailleras en collaboration directe avec le CEO.</p>
-    <div class="phase">
-      <div class="phase-title"><div class="phase-number">1</div>Dans un premier temps</div>
-      <ul>
-        <li>Intégrer l'équipe commerciale et absorber la connaissance métier, clients et process existants</li>
-        <li>Comprendre le marché, les offres, les cycles de vente, les interlocuteurs clés</li>
-        <li>Apporter immédiatement tes méthodes : prospection moderne, outils digitaux (CRM, automation, LinkedIn), rigueur commerciale</li>
-        <li>Travailler en binôme avec les commerciaux en place pour assurer le transfert de connaissance</li>
-      </ul>
+    <div class="section-label">La vision</div>
+    <h2>Là où on veut aller</h2>
+    <p>On ne cherche pas juste un commercial de plus. On construit une machine commerciale capable de générer <strong>100K€ de nouveau CA signé par mois</strong>, portée par une équipe de 3 à 5 personnes. Ton rôle : la construire et la diriger.</p>
+
+    <div class="vision-grid">
+      <div class="vision-card">
+        <div class="vc-number">100K€</div>
+        <div class="vc-label">Nouveau CA / mois</div>
+        <div class="vc-detail">Objectif équipe à 18 mois</div>
+      </div>
+      <div class="vision-card">
+        <div class="vc-number">3-5</div>
+        <div class="vc-label">Commerciaux</div>
+        <div class="vc-detail">20K€/pers/mois minimum</div>
+      </div>
+      <div class="vision-card">
+        <div class="vc-number">90%</div>
+        <div class="vc-label">Taux de renouvellement</div>
+        <div class="vc-detail">Ne signer que des clients qui restent</div>
+      </div>
     </div>
-    <div class="phase">
-      <div class="phase-title"><div class="phase-number">2</div>Rapidement ensuite</div>
-      <ul>
-        <li>Prendre une part croissante du portefeuille et du développement commercial</li>
-        <li>Structurer les process de vente : pipeline, reporting, KPI, rituels commerciaux</li>
-        <li>Participer activement à la transformation de l'entreprise vers un modèle full remote</li>
-        <li>Évoluer vers un rôle de Responsable Commercial / Head of Sales avec le management de l'équipe</li>
-      </ul>
+
+    <div class="cfl-box">
+      <div class="cfl-title">🎯 Stratégie "Client For Life"</div>
+      <div class="cfl-text">On ne vend plus à tout le monde. On cible <strong>uniquement</strong> les entreprises BTP qui ont un besoin structurel de recrutement, les moyens de payer <span class="cfl-stat">1 500 - 2 000€/an</span> et qui vont renouveler année après année. Un client qui churne après un an = un mauvais client qu'on n'aurait pas dû signer. L'objectif : <span class="cfl-stat">90% de renouvellement</span>.</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Ton évolution</div>
+    <h2>De commercial senior à Directeur Commercial</h2>
+    <p>Ce n'est pas un poste figé. C'est un parcours en 3 phases, avec une montée en responsabilités claire et rapide.</p>
+
+    <div class="evolution-timeline">
+      <div class="evo-step">
+        <div class="evo-dot"></div>
+        <div class="evo-period">Mois 1 — 6 · Player</div>
+        <div class="evo-title">Commercial senior solo</div>
+        <div class="evo-desc">Tu vends, tu crées le playbook commercial, tu testes les nouvelles offres (panier moyen 1 500-2 000€). Tu prouves le modèle. Objectif : 20K€ de nouveau CA signé par mois.</div>
+      </div>
+      <div class="evo-step">
+        <div class="evo-dot"></div>
+        <div class="evo-period">Mois 6 — 12 · Player-Coach</div>
+        <div class="evo-title">Commercial + premier recrutement</div>
+        <div class="evo-desc">Tu continues à vendre tout en recrutant et formant un premier commercial junior. Tu transmets ton playbook. L'équipe commence à scaler.</div>
+      </div>
+      <div class="evo-step future">
+        <div class="evo-dot"></div>
+        <div class="evo-period">Mois 12 — 18 · Coach-Player</div>
+        <div class="evo-title">Directeur Commercial</div>
+        <div class="evo-desc">Tu manages 3 à 5 personnes, tu pilotes la stratégie, tu gardes les gros comptes. L'équipe atteint 100K€/mois de nouveau CA. Tu es le bras droit commercial du CEO.</div>
+      </div>
     </div>
   </div>
 
@@ -179,7 +234,7 @@
       <div class="offer-row"><div class="offer-label">Plafond</div><div class="offer-value"><strong>Aucun.</strong> Plus tu vends, plus tu gagnes. Pas de limite.</div></div>
       <div class="offer-row"><div class="offer-label">Localisation</div><div class="offer-value">Paris au démarrage → Full remote</div></div>
       <div class="offer-row"><div class="offer-label">Démarrage</div><div class="offer-value">Dès que possible</div></div>
-      <div class="offer-row"><div class="offer-label">Perspective</div><div class="offer-value">Évolution vers Responsable Commercial / Head of Sales</div></div>
+      <div class="offer-row"><div class="offer-label">Perspective</div><div class="offer-value"><strong>Directeur Commercial</strong> à 12-18 mois — management d'une équipe de 3-5 personnes</div></div>
     </div>
   </div>
 
@@ -302,7 +357,7 @@
   </div>
 
   <div class="cta-section">
-    <p>Ce n'est pas juste un poste de commercial.<br>C'est un deal où plus tu gagnes, plus on gagne. Pas de plafond, pas de politique. Juste la performance.</p>
+    <p>Ce n'est pas juste un poste de commercial.<br>C'est un rôle de futur Directeur Commercial, avec un deal où plus tu gagnes, plus on gagne. Pas de plafond, pas de politique. Juste la performance et l'ambition.</p>
     <a href="mailto:theau@samsara.am?subject=Candidature%20Commercial%20PME%20BTP" class="cta-btn">On en discute ? →</a>
   </div>
 
